@@ -11,10 +11,10 @@ for (let i = 1; i <= 151; i++) {
 }
 
 function mostrarPokemon(poke) {
-    // Obtenemos el nombre del primer tipo
+    // obtener el nombre del primer tipo
     const primerTipo = poke.types[0].type.name;
 
-    // Generamos el HTML de los tipos
+    // generar el HTML de los tipos
     let tipos = poke.types.map((type) => `<p class="${type.type.name} tipo">${type.type.name}</p>`);
     tipos = tipos.join('');
 
@@ -23,7 +23,7 @@ function mostrarPokemon(poke) {
     const div = document.createElement("div");
     div.classList.add("pokemon");
     
-    // APLICAMOS EL GRADIENTE: Mitad color del tipo (arriba), mitad blanco (abajo)
+    // Se plica un gradiente para la mitad blanca y mitad con color
     // Usamos var(--type-NOMBRE) que ya tienes en tu CSS
     div.style.background = `linear-gradient(to bottom, var(--type-${primerTipo}) 50%, white 50%)`;
 
