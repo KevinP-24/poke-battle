@@ -1,0 +1,41 @@
+# Dependencias / paquetes
+node_modules/
+
+# Variables de entorno
+.env
+.env.local
+
+# VS Code
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.example.json
+
+# Otros editores
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+logs/
+
+# Archivos temporales
+tmp/
+temp/
+*.tmp
+*.bak
+*.swp
+
+# Builds opcionales
+dist/
+build/
+
+# Archivos locales del proyecto
+debug/
+screenshots/
+localStorage-backup.json
