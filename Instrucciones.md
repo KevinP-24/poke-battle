@@ -683,3 +683,8 @@ El componente **Preguntar** puede tener la siguiente estructura:
 El proyecto propuesto cumple con los requisitos del desafío de desarrollo web porque integra HTML, CSS y JavaScript en un componente interactivo llamado **Preguntar**. Este componente permite consultar información desde una API externa, mostrar resultados dinámicos, aplicar manipulación del DOM, implementar modo oscuro con variables CSS y organizar la lógica mediante programación orientada a objetos.
 
 Además, el uso de patrones como **Adapter** y **Strategy** permite mejorar la estructura del código sin recurrir a Factory ni Singleton. La inclusión de paginación, `localStorage`, CSS Nesting y una arquitectura clara de carpetas fortalece la calidad técnica del proyecto y facilita su mantenimiento.
+
+---
+# 21. Importante !!!!
+
+Se me indicio no hacer varias ventanas HTML solo debe exisitir 1 unico indiice, todo lo debemos hacer declarando o modificiando el DOM, con un nivel simple nada de metodos avanzados o dificil de sustentar 
