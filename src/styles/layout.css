@@ -1,0 +1,80 @@
+.app {
+  width: min(1100px, 100%);
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.battle {
+  display: grid;
+  gap: 24px;
+}
+
+.battle-arena {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 24px;
+  min-height: 540px;
+  padding: 32px;
+  border-radius: 8px;
+  background:
+    linear-gradient(rgba(5, 11, 20, 0.18), rgba(5, 11, 20, 0.52)),
+    url("../../public/assets/images/estadio.jpg") center / cover no-repeat;
+  overflow: hidden;
+  position: relative;
+}
+
+.battle-arena__player {
+  display: flex;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+.battle-arena__player--left {
+  justify-content: flex-start;
+}
+
+.battle-arena__player--right {
+  justify-content: flex-end;
+}
+
+.battle-arena__player .pokemon-card {
+  width: min(320px, 100%);
+}
+
+.battle-arena__player--left .pokemon-card__image {
+  transform: scaleX(-1);
+}
+
+.selection-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 760px) {
+  .battle-arena,
+  .selection-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .battle-arena {
+    min-height: auto;
+    padding: 18px;
+  }
+
+  .battle-arena__player,
+  .battle-arena__player--left,
+  .battle-arena__player--right {
+    justify-content: center;
+  }
+}
