@@ -1,19 +1,37 @@
 export class ThemeToggleComponent {
   constructor(themeService) {
-    // Recibimos el servicio que sabe cambiar y guardar el tema.
     this.themeService = themeService
     this.element = document.createElement("button")
   }
-
   render() {
     this.element.className = "theme-button"
-    this.element.textContent = "Cambiar tema"
-
-    // Al hacer click, llamamos al servicio. El componente solo maneja el boton.
+    this.element.innerHTML = `
+      <span class="theme-button__indicator">
+        <span class="theme-button__icon-container">
+          <i class="theme-button__icon fa-solid"></i>
+        </span>
+      </span>
+    `
+    this.updateIcon()
     this.element.addEventListener("click", () => {
       this.themeService.toggleTheme()
+      const icon = this.element.querySelector(".theme-button__icon")
+      icon.classList.add("animated")
+      this.updateIcon()
+      setTimeout(() => {
+        icon.classList.remove("animated")
+      }, 500)
     })
-
     return this.element
+  }
+  updateIcon() {
+    const icon = this.element.querySelector(".theme-button__icon")
+    const theme = document.documentElement.dataset.theme
+    icon.classList.remove("fa-sun", "fa-moon")
+    if (theme === "dark") {
+      icon.classList.add("fa-moon")
+    } else {
+      icon.classList.add("fa-sun")
+    }
   }
 }
