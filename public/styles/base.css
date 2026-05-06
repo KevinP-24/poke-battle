@@ -9,10 +9,16 @@
 /* Estilos generales de la pagina.
    El color de fondo y texto vienen de variables para soportar modo oscuro. */
 body {
+  text-align: center;
   min-height: 100vh;
   background: var(--color-bg);
   color: var(--color-text);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.app-logo {
+  max-height: 80px;        /* Ajusta este valor según prefieras */
+  display: block;
 }
 
 /* Los botones heredan la fuente del body y muestran cursor de click. */

@@ -14,29 +14,28 @@ export class App {
   }
 
   render() {
-    // Antes de pintar la pagina, cargamos el tema guardado.
     this.themeService.loadTheme()
 
-    // Creamos los elementos principales con manejo del DOM.
     const page = document.createElement("div")
     page.className = "app"
 
     const header = document.createElement("header")
     header.className = "app-header"
-
-    const title = document.createElement("h1")
-    title.textContent = "Pokemon Battle"
+    //Creacion de imagen con el DOM
+    const titleImage = document.createElement("img");
+    titleImage.src = "./assets/images/batalla.png"; 
+    titleImage.alt = "Pokemon Battle";
+    titleImage.className = "app-logo"; // Opcional: para darle estilos en CSS
 
     const themeToggle = new ThemeToggleComponent(this.themeService)
 
-    header.append(title, themeToggle.render())
+    // 2. Agregamos la imagen al header (quitamos 'title')
+    header.append(titleImage, themeToggle.render())
 
     const battleComponent = new BattleComponent()
 
-    // Metemos el header y el componente principal dentro de la pagina.
     page.append(header, battleComponent.render())
 
-    // Limpiamos el root y agregamos la pagina nueva.
     this.root.innerHTML = ""
     this.root.append(page)
   }
