@@ -1,9 +1,13 @@
+/* Reset basico:
+   quitamos margenes/paddings por defecto y hacemos mas facil calcular tamanos. */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+/* Estilos generales de la pagina.
+   El color de fondo y texto vienen de variables para soportar modo oscuro. */
 body {
   min-height: 100vh;
   background: var(--color-bg);
@@ -11,11 +15,13 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Los botones heredan la fuente del body y muestran cursor de click. */
 button {
   cursor: pointer;
   font: inherit;
 }
 
+/* Evita que las imagenes se salgan de su contenedor. */
 img {
   max-width: 100%;
 }

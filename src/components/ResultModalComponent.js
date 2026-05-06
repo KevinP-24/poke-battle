@@ -2,6 +2,7 @@ import { PokemonCardComponent } from "./PokemonCardComponent.js"
 
 export class ResultModalComponent {
   constructor({ title, message = "", result = null, pokemonOne = null, pokemonTwo = null, winnerPokemon = null }) {
+    // El modal puede mostrar un mensaje simple o un resultado de batalla.
     this.title = title
     this.message = message
     this.result = result
@@ -12,18 +13,22 @@ export class ResultModalComponent {
   }
 
   render() {
+    // Capa oscura que cubre la pagina.
     this.element.className = "modal"
 
+    // Caja blanca del modal.
     const content = document.createElement("div")
     content.className = "modal__content"
 
     const title = document.createElement("h2")
     title.textContent = this.title
 
+    // Aqui va el texto o la card del ganador.
     const body = document.createElement("div")
     body.className = "modal__body"
 
     if (this.result) {
+      // Si hay ganador, mostramos su card reutilizando PokemonCardComponent.
       if (this.winnerPokemon) {
         const winnerCard = document.createElement("div")
         winnerCard.className = "modal__winner-card"
@@ -31,6 +36,7 @@ export class ResultModalComponent {
         body.append(winnerCard)
       }
 
+      // Informacion resumida del resultado.
       const resultInfo = document.createElement("div")
       resultInfo.className = "modal__result-info"
       resultInfo.innerHTML = `
@@ -47,6 +53,7 @@ export class ResultModalComponent {
       body.textContent = this.message
     }
 
+    // Boton para cerrar el modal eliminandolo del DOM.
     const closeButton = document.createElement("button")
     closeButton.className = "primary-button"
     closeButton.textContent = "Cerrar"

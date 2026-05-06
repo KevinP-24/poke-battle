@@ -1,4 +1,8 @@
+/* :root guarda variables globales.
+   Una variable CSS se puede reutilizar con var(--nombre).
+   Esto ayuda a cambiar colores en un solo lugar. */
 :root {
+  /* Colores principales del modo claro. */
   --color-bg: #f4f7fb;
   --color-surface: #ffffff;
   --color-text: #18212f;
@@ -7,6 +11,9 @@
   --color-primary-dark: #a61529;
   --color-border: #d9e1ec;
   --color-empty-bg: rgba(255, 255, 255, 0.82);
+
+  /* Colores por tipo de Pokemon.
+     Se usan en las cards, chips de tipo y barras de estadisticas. */
   --type-normal: #a8a878;
   --type-fire: #f08030;
   --type-water: #6890f0;

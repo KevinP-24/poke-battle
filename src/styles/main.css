@@ -1,3 +1,10 @@
+/* Archivo principal de estilos.
+   Desde aqui importamos los CSS en orden:
+   1. Variables de colores.
+   2. Tema oscuro.
+   3. Estilos base.
+   4. Layout general.
+   5. Componentes visuales. */
 @import url("./variables.css");
 @import url("./themes.css");
 @import url("./base.css");

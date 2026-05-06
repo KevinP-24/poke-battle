@@ -1,5 +1,6 @@
 export class PokemonAdapter {
   static adapt(data) {
+    // Convertimos la respuesta grande de PokeAPI en un objeto pequeno.
     return {
       id: data.id,
       name: data.name,

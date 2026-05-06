@@ -1,5 +1,6 @@
 export class PokemonCardComponent {
   constructor(pokemon = null) {
+    // Si pokemon llega null, mostramos la card vacia.
     this.pokemon = pokemon
     this.element = document.createElement("article")
   }
@@ -7,6 +8,7 @@ export class PokemonCardComponent {
   render() {
     this.element.className = "pokemon-card pokemon"
 
+    // Estado inicial antes de seleccionar un Pokemon.
     if (!this.pokemon) {
       this.element.innerHTML = `
         <div class="pokemon-card__empty">Selecciona un Pokemon</div>
@@ -19,9 +21,11 @@ export class PokemonCardComponent {
     const types = this.pokemon.types.map((type) => `<p class="${type} tipo">${type}</p>`)
     const pokeId = this.pokemon.id.toString().padStart(3, "0")
 
+    // El primer tipo define el color de fondo y de las barras de estadisticas.
     this.element.style.background = `linear-gradient(to bottom, var(--type-${firstType}) 45%, var(--color-surface) 45%)`
     this.element.style.setProperty("--pokemon-color", `var(--type-${firstType})`)
 
+    // Creamos la estructura visual de la card con datos ya limpios del Adapter.
     this.element.innerHTML = `
       <p class="pokemon-id-back">#${pokeId}</p>
       <div class="pokemon-imagen">
@@ -54,6 +58,7 @@ export class PokemonCardComponent {
   createStatBar(label, value) {
     const percent = this.getStatPercent(value)
 
+    // La barra se llena usando el porcentaje calculado desde el valor real.
     return `
       <div class="stat-bar">
         <div class="stat-bar__header">
@@ -68,6 +73,7 @@ export class PokemonCardComponent {
   }
 
   getStatPercent(value) {
+    // Usamos 150 como maximo visual para que las barras sean faciles de entender.
     const maxStat = 150
     const percent = (value * 100) / maxStat
 

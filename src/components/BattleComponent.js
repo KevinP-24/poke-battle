@@ -8,21 +8,29 @@ import { BalancedStrategy } from "../strategies/BalancedStrategy.js"
 
 export class BattleComponent {
   constructor() {
+    // Este es el componente principal de la batalla.
     this.element = document.createElement("main")
+
+    // Servicios que usa la batalla.
     this.pokemonService = new PokemonService()
     this.storageService = new StorageService()
     this.battleService = new BattleService(new BalancedStrategy())
+
+    // Aqui guardamos los dos Pokemon seleccionados.
     this.pokemonOne = null
     this.pokemonTwo = null
   }
 
   render() {
+    // Limpiamos y volvemos a construir la vista principal.
     this.element.className = "battle"
     this.element.innerHTML = ""
 
+    // Arena donde se ven las dos cards y el VS.
     const arena = document.createElement("section")
     arena.className = "battle-arena"
 
+    // Contenedores separados para poder actualizar cada lado.
     this.cardOneContainer = document.createElement("div")
     this.cardTwoContainer = document.createElement("div")
     this.cardOneContainer.className = "battle-arena__player battle-arena__player--left"
@@ -31,6 +39,7 @@ export class BattleComponent {
     this.cardOneContainer.append(new PokemonCardComponent().render())
     this.cardTwoContainer.append(new PokemonCardComponent().render())
 
+    // Imagen de VS creada tambien desde JavaScript.
     const versus = document.createElement("img")
     versus.className = "versus"
     versus.src = "./assets/images/vs.webp"
@@ -38,11 +47,13 @@ export class BattleComponent {
 
     arena.append(this.cardOneContainer, versus, this.cardTwoContainer)
 
+    // Boton que ejecuta la simulacion de batalla.
     const simulateButton = document.createElement("button")
     simulateButton.className = "primary-button"
     simulateButton.textContent = "Simular batalla"
     simulateButton.addEventListener("click", this.simulateBattle.bind(this))
 
+    // Seccion donde estan las dos listas de seleccion.
     const lists = document.createElement("section")
     lists.className = "selection-grid"
 
@@ -60,12 +71,14 @@ export class BattleComponent {
 
     lists.append(listOne.render(), listTwo.render())
 
+    // Historial basico de batallas guardadas en localStorage.
     this.historyContainer = document.createElement("section")
     this.historyContainer.className = "history"
     this.historyContainer.innerHTML = "<h2>Historial de batallas</h2><p>No hay batallas guardadas.</p>"
 
     this.element.append(arena, simulateButton, lists, this.historyContainer)
 
+    // Cargamos la primera pagina de cada lista.
     listOne.loadPage()
     listTwo.loadPage()
 
@@ -73,20 +86,27 @@ export class BattleComponent {
   }
 
   selectPokemonOne(pokemon) {
+    // Guardamos el Pokemon 1 en memoria y en localStorage.
     this.pokemonOne = pokemon
     this.storageService.save("selectedPokemon1", pokemon.name)
+
+    // Reemplazamos la card vacia por la card del Pokemon seleccionado.
     this.cardOneContainer.innerHTML = ""
     this.cardOneContainer.append(new PokemonCardComponent(pokemon).render())
   }
 
   selectPokemonTwo(pokemon) {
+    // Guardamos el Pokemon 2 en memoria y en localStorage.
     this.pokemonTwo = pokemon
     this.storageService.save("selectedPokemon2", pokemon.name)
+
+    // Reemplazamos la card vacia por la card del Pokemon seleccionado.
     this.cardTwoContainer.innerHTML = ""
     this.cardTwoContainer.append(new PokemonCardComponent(pokemon).render())
   }
 
   simulateBattle() {
+    // Validamos que existan dos Pokemon antes de calcular.
     if (!this.pokemonOne || !this.pokemonTwo) {
       const modal = new ResultModalComponent({
         title: "Faltan Pokemon",
@@ -96,9 +116,11 @@ export class BattleComponent {
       return
     }
 
+    // BattleService usa la estrategia para calcular el ganador.
     const result = this.battleService.battle(this.pokemonOne, this.pokemonTwo)
     let winnerPokemon = null
 
+    // Buscamos el objeto completo del ganador para mostrar su card en el modal.
     if (result.winner === this.pokemonOne.name) {
       winnerPokemon = this.pokemonOne
     }
@@ -107,6 +129,7 @@ export class BattleComponent {
       winnerPokemon = this.pokemonTwo
     }
 
+    // Registro sencillo para guardar en el historial.
     const battleRecord = {
       pokemon1: this.pokemonOne.name,
       pokemon2: this.pokemonTwo.name,
@@ -117,6 +140,7 @@ export class BattleComponent {
 
     this.storageService.addBattle(battleRecord)
 
+    // Creamos el modal con el resultado y la card del ganador.
     const modal = new ResultModalComponent({
       title: "Resultado de la batalla",
       result,
@@ -127,15 +151,19 @@ export class BattleComponent {
 
     document.body.append(modal.render())
     this.renderHistory()
+
+    // Dejamos la arena limpia para una nueva batalla.
     this.cleanArena()
   }
 
   cleanArena() {
+    // Borramos seleccionados de memoria y localStorage.
     this.pokemonOne = null
     this.pokemonTwo = null
     this.storageService.remove("selectedPokemon1")
     this.storageService.remove("selectedPokemon2")
 
+    // Volvemos a mostrar cards vacias.
     this.cardOneContainer.innerHTML = ""
     this.cardTwoContainer.innerHTML = ""
     this.cardOneContainer.append(new PokemonCardComponent().render())
@@ -143,6 +171,7 @@ export class BattleComponent {
   }
 
   renderHistory() {
+    // Leemos las batallas guardadas y las pintamos en pantalla.
     const history = this.storageService.getBattles()
     this.historyContainer.innerHTML = "<h2>Historial de batallas</h2>"
 

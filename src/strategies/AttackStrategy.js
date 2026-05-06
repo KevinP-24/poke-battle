@@ -1,5 +1,6 @@
 export class AttackStrategy {
   calculate(pokemonOne, pokemonTwo) {
+    // Esta estrategia solo compara el ataque.
     const score1 = pokemonOne.stats.attack
     const score2 = pokemonTwo.stats.attack
 

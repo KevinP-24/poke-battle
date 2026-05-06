@@ -1,9 +1,12 @@
+/* Contenedor general de toda la aplicacion.
+   min(1100px, 100%) significa: maximo 1100px, pero en pantallas pequenas usa 100%. */
 .app {
   width: min(1100px, 100%);
   margin: 0 auto;
   padding: 24px;
 }
 
+/* Header superior: titulo a la izquierda y boton de tema a la derecha. */
 .app-header {
   display: flex;
   align-items: center;
@@ -12,11 +15,14 @@
   margin-bottom: 24px;
 }
 
+/* La batalla completa se organiza en filas con espacio entre secciones. */
 .battle {
   display: grid;
   gap: 24px;
 }
 
+/* Arena principal:
+   dos columnas para los Pokemon, fondo de estadio y posicion relativa para poner el VS encima. */
 .battle-arena {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -32,6 +38,7 @@
   position: relative;
 }
 
+/* Cada lado de la arena contiene una card de Pokemon. */
 .battle-arena__player {
   display: flex;
   width: 100%;
@@ -39,28 +46,35 @@
   z-index: 2;
 }
 
+/* Pokemon 1 queda a la izquierda. */
 .battle-arena__player--left {
   justify-content: flex-start;
 }
 
+/* Pokemon 2 queda a la derecha. */
 .battle-arena__player--right {
   justify-content: flex-end;
 }
 
+/* Controlamos el ancho de las cards dentro de la arena. */
 .battle-arena__player .pokemon-card {
   width: min(320px, 100%);
 }
 
+/* La imagen del Pokemon izquierdo se voltea para que mire al centro. */
 .battle-arena__player--left .pokemon-card__image {
   transform: scaleX(-1);
 }
 
+/* Las dos listas de seleccion se muestran una al lado de la otra. */
 .selection-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
 }
 
+/* Responsive:
+   en pantallas pequenas pasamos todo a una sola columna. */
 @media (max-width: 760px) {
   .battle-arena,
   .selection-grid {

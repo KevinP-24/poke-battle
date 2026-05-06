@@ -1,5 +1,6 @@
 export class SpeedStrategy {
   calculate(pokemonOne, pokemonTwo) {
+    // Esta estrategia solo compara la velocidad.
     const score1 = pokemonOne.stats.speed
     const score2 = pokemonTwo.stats.speed
 

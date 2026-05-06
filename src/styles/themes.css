@@ -1,4 +1,7 @@
+/* Cuando JavaScript pone data-theme="dark" en <html>,
+   estas variables reemplazan las variables claras de :root. */
 [data-theme="dark"] {
+  /* Colores principales del modo oscuro. */
   --color-bg: #131720;
   --color-surface: #202736;
   --color-text: #f5f7fb;
