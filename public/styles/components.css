@@ -442,7 +442,7 @@
 /* Cuerpo del modal:
    card del ganador a un lado y texto del resultado al otro. */
 .modal__body {
-  display: grid;
+  /* display: grid; */
   grid-template-columns: minmax(300px, 360px) 1fr;
   align-items: center;
   gap: 28px;
