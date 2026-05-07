@@ -2,84 +2,84 @@ export class PokemonCardComponent {
   constructor(pokemon = null) {
     // Si pokemon llega null, mostramos la card vacia.
     this.pokemon = pokemon
-    this.elemento = document.createElement("article")
+    this.element = document.createElement("article")
   }
 
   render() {
-    this.elemento.className = "pokemon-card pokemon"
+    this.element.className = "pokemon-card pokemon"
 
     // Estado inicial antes de seleccionar un Pokemon.
     if (!this.pokemon) {
-      this.elemento.innerHTML = `
+      this.element.innerHTML = `
         <div class="pokemon-card__empty">Selecciona un Pokemon</div>
       `
-      return this.elemento
+      return this.element
     }
 
-    const estadisticas = this.pokemon.estadisticas
-    const tipoPrincipal = this.pokemon.tipos[0]
-    let tipos = ""
+    const stats = this.pokemon.stats
+    const firstType = this.pokemon.types[0]
+    let types = ""
 
-    for (let i = 0; i < this.pokemon.tipos.length; i += 1) {
-      const tipo = this.pokemon.tipos[i]
-      tipos += `<p class="${tipo} tipo">${tipo}</p>`
+    for (let i = 0; i < this.pokemon.types.length; i += 1) {
+      const type = this.pokemon.types[i]
+      types += `<p class="${type} tipo">${type}</p>`
     }
 
-    const idPokemon = this.pokemon.id.toString().padStart(3, "0")
+    const pokeId = this.pokemon.id.toString().padStart(3, "0")
 
     // El primer tipo define el color de fondo y de las barras de estadisticas.
-    this.elemento.style.background = `linear-gradient(to bottom, var(--type-${tipoPrincipal}) 45%, var(--color-surface) 45%)`
-    this.elemento.style.setProperty("--pokemon-color", `var(--type-${tipoPrincipal})`)
+    this.element.style.background = `linear-gradient(to bottom, var(--type-${firstType}) 45%, var(--color-surface) 45%)`
+    this.element.style.setProperty("--pokemon-color", `var(--type-${firstType})`)
 
     // Creamos la estructura visual de la card con datos ya limpios del Adapter.
-    this.elemento.innerHTML = `
-      <p class="pokemon-id-back">#${idPokemon}</p>
+    this.element.innerHTML = `
+      <p class="pokemon-id-back">#${pokeId}</p>
       <div class="pokemon-imagen">
-        <img class="pokemon-card__image" src="${this.pokemon.imagen}" alt="${this.pokemon.nombre}">
+        <img class="pokemon-card__image" src="${this.pokemon.image}" alt="${this.pokemon.name}">
       </div>
       <div class="pokemon-info">
         <div class="nombre-contenedor">
-          <p class="pokemon-id">#${idPokemon}</p>
-          <h2 class="pokemon-nombre">${this.pokemon.nombre}</h2>
+          <p class="pokemon-id">#${pokeId}</p>
+          <h2 class="pokemon-nombre">${this.pokemon.name}</h2>
         </div>
         <div class="pokemon-tipos">
-          ${tipos}
+          ${types}
         </div>
         <div class="pokemon-stats">
-        <p class="stat">${this.pokemon.altura}m</p>
-        <p class="stat">${this.pokemon.peso}kg</p>
+        <p class="stat">${this.pokemon.height}m</p>
+        <p class="stat">${this.pokemon.weight}kg</p>
         </div>
         <div class="pokemon-battle-stats">
-          ${this.crearBarraEstadistica("HP", estadisticas.hp)}
-          ${this.crearBarraEstadistica("Ataque", estadisticas.ataque)}
-          ${this.crearBarraEstadistica("Defensa", estadisticas.defensa)}
-          ${this.crearBarraEstadistica("Velocidad", estadisticas.velocidad)}
+          ${this.createStatBar("HP", stats.hp)}
+          ${this.createStatBar("Ataque", stats.attack)}
+          ${this.createStatBar("Defensa", stats.defense)}
+          ${this.createStatBar("Velocidad", stats.speed)}
         </div>
       </div>
     `
 
-    return this.elemento
+    return this.element
   }
 
-  crearBarraEstadistica(etiqueta, valor) {
-    const porcentaje = this.obtenerPorcentajeEstadistica(valor)
+  createStatBar(label, value) {
+    const percent = this.getStatPercent(value)
 
     // La barra se llena usando el porcentaje calculado desde el valor real.
     return `
       <div class="stat-bar">
         <div class="stat-bar__header">
-          <span>${etiqueta}</span>
-          <strong>${valor}</strong>
+          <span>${label}</span>
+          <strong>${value}</strong>
         </div>
         <div class="stat-bar__track">
-          <div class="stat-bar__fill" style="width: ${porcentaje}%"></div>
+          <div class="stat-bar__fill" style="width: ${percent}%"></div>
         </div>
       </div>
     `
   }
 
-  obtenerPorcentajeEstadistica(valor) {
+  getStatPercent(value) {
     // Usamos 150 como maximo visual para que las barras sean faciles de entender.
-    return Math.min((valor * 100) / 150, 100)
+    return Math.min((value * 100) / 150, 100)
   }
 }

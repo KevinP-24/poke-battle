@@ -1,42 +1,39 @@
 export class PaginationComponent {
-  constructor({ irAnterior, irSiguiente }) {
-    this.irAnterior = irAnterior
-    this.irSiguiente = irSiguiente
-    this.pagina = 1
-    this.paginaMaxima = 1
-    this.elemento = document.createElement("div")
+  constructor({ getPage, getMaxPage, onPrev, onNext }) {
+    this.getPage = getPage
+    this.getMaxPage = getMaxPage
+    this.onPrev = onPrev
+    this.onNext = onNext
+    this.element = document.createElement("div")
   }
 
   render() {
-    this.elemento.className = "pagination"
+    this.element.className = "pagination"
 
     // Creamos los botones con innerHTML porque es una estructura pequena.
-    this.elemento.innerHTML = `
+    this.element.innerHTML = `
       <button class="pagination__prev">Anterior</button>
-      <span class="pagination__page">Pagina ${this.pagina}</span>
+      <span class="pagination__page">Pagina ${this.getPage()}</span>
       <button class="pagination__next">Siguiente</button>
     `
 
     // Cada boton ejecuta la funcion que recibio en el constructor.
-    this.elemento.querySelector(".pagination__prev").addEventListener("click", this.irAnterior)
-    this.elemento.querySelector(".pagination__next").addEventListener("click", this.irSiguiente)
+    this.element.querySelector(".pagination__prev").addEventListener("click", this.onPrev)
+    this.element.querySelector(".pagination__next").addEventListener("click", this.onNext)
 
-    this.update(1, 1)
+    this.update(this.getPage(), this.getMaxPage())
 
-    return this.elemento
+    return this.element
   }
 
-  update(pagina, paginaMaxima) {
+  update(page, maxPage) {
     // Solo cambiamos el texto de la pagina actual.
-    this.pagina = pagina
-    this.paginaMaxima = paginaMaxima
+    const pageLabel = this.element.querySelector(".pagination__page")
+    const prevButton = this.element.querySelector(".pagination__prev")
+    const nextButton = this.element.querySelector(".pagination__next")
 
-    const etiquetaPagina = this.elemento.querySelector(".pagination__page")
-    const botonAnterior = this.elemento.querySelector(".pagination__prev")
-    const botonSiguiente = this.elemento.querySelector(".pagination__next")
-
-    etiquetaPagina.textContent = `Pagina ${this.pagina}`
-    botonAnterior.disabled = pagina <= 1
-    botonSiguiente.disabled = this.pagina >= this.paginaMaxima
+    pageLabel.textContent = `Pagina ${page}`
+    prevButton.disabled = page <= 1
+    nextButton.disabled = page >= maxPage
   }
 }

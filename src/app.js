@@ -4,35 +4,35 @@ import { StorageService } from "./services/StorageService.js"
 import { ThemeService } from "./services/ThemeService.js"
 
 export class App {
-  constructor(contenedorPrincipal) {
-    this.contenedorPrincipal = contenedorPrincipal
+  constructor(root) {
+    this.root = root
 
-    this.servicioAlmacenamiento = new StorageService()
-    this.servicioTema = new ThemeService(this.servicioAlmacenamiento)
+    this.storageService = new StorageService()
+    this.themeService = new ThemeService(this.storageService)
   }
 
   render() {
-    this.servicioTema.cargarTema()
+    this.themeService.loadTheme()
 
-    const pagina = document.createElement("div")
-    pagina.className = "app"
+    const page = document.createElement("div")
+    page.className = "app"
 
-    const encabezado = document.createElement("header")
-    encabezado.className = "app-header"
-    const imagenTitulo = document.createElement("img")
-    imagenTitulo.src = "./assets/images/batalla.png"
-    imagenTitulo.alt = "Batalla Pokemon"
-    imagenTitulo.className = "app-logo"
+    const header = document.createElement("header")
+    header.className = "app-header"
+    const titleImage = document.createElement("img")
+    titleImage.src = "./assets/images/batalla.png"
+    titleImage.alt = "Pokemon Battle"
+    titleImage.className = "app-logo"
 
-    const botonTema = new ThemeToggleComponent(this.servicioTema)
+    const themeToggle = new ThemeToggleComponent(this.themeService)
 
-    encabezado.append(imagenTitulo, botonTema.render())
+    header.append(titleImage, themeToggle.render())
 
-    const componenteBatalla = new BattleComponent()
+    const battleComponent = new BattleComponent()
 
-    pagina.append(encabezado, componenteBatalla.render())
+    page.append(header, battleComponent.render())
 
-    this.contenedorPrincipal.innerHTML = ""
-    this.contenedorPrincipal.append(pagina)
+    this.root.innerHTML = ""
+    this.root.append(page)
   }
 }

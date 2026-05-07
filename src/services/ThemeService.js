@@ -3,23 +3,23 @@ export class ThemeService {
     this.storageService = storageService
   }
 
-  cargarTema() {
+  loadTheme() {
     // Leemos el tema guardado y lo ponemos como atributo en <html>.
-    const tema = this.storageService.obtener("tema", "light")
-    document.documentElement.dataset.theme = tema
+    const theme = this.storageService.get("theme", "light")
+    document.documentElement.dataset.theme = theme
   }
 
-  cambiarTema() {
+  toggleTheme() {
     // Si esta en oscuro pasa a claro, si no pasa a oscuro.
-    const temaActual = document.documentElement.dataset.theme
-    let temaNuevo = "dark"
+    const currentTheme = document.documentElement.dataset.theme
+    let newTheme = "dark"
 
-    if (temaActual === "dark") {
-      temaNuevo = "light"
+    if (currentTheme === "dark") {
+      newTheme = "light"
     }
 
     // Guardamos el tema para que se mantenga al recargar.
-    document.documentElement.dataset.theme = temaNuevo
-    this.storageService.guardar("tema", temaNuevo)
+    document.documentElement.dataset.theme = newTheme
+    this.storageService.save("theme", newTheme)
   }
 }
