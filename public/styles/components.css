@@ -291,6 +291,96 @@
   & .pokemon-list__button {
     text-transform: capitalize;
   }
+
+  /* Mini tarjeta usada para seleccionar Pokemon. */
+  & .pokemon-list__card {
+    position: relative;
+    display: grid;
+    grid-template-columns: 38% 62%;
+    align-items: stretch;
+    gap: 0;
+    min-height: 120px;
+    padding: 0;
+    cursor: pointer;
+    overflow: hidden;
+    text-align: left;
+  }
+
+  /* Mitad colorida de la mini tarjeta. */
+  & .pokemon-list__side--color {
+    background: var(--pokemon-list-color);
+  }
+
+  /* Mitad blanca de la mini tarjeta. */
+  & .pokemon-list__side--white {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 6px;
+    padding: 12px 12px 12px 52px;
+    background: var(--color-surface);
+    position: relative;
+    text-align: right;
+  }
+
+  /* Imagen pequena de la mini tarjeta. */
+  & .pokemon-list__image {
+    position: absolute;
+    left: 38%;
+    top: 50%;
+    z-index: 2;
+    width: 82px;
+    height: 82px;
+    object-fit: contain;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.18));
+  }
+
+  /* Numero pequeno del Pokemon. */
+  & .pokemon-list__id {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-muted);
+  }
+
+  /* Tipo o etiqueta pequena en la mitad de color. */
+  & .pokemon-list__type {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: capitalize;
+    opacity: 0.9;
+  }
+
+  /* Nombre del Pokemon en la mini tarjeta. */
+  & .pokemon-list__name {
+    font-size: 14px;
+    text-transform: capitalize;
+    text-align: right;
+    color: var(--color-text);
+    margin-top: 2px;
+  }
+
+  /* Grupo de tipos de la mini tarjeta. */
+  & .pokemon-list__types {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  & .pokemon-list__type--white {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    padding: 4px 8px;
+    opacity: 1;
+  }
 }
 
 /* Contenedor de paginacion. */

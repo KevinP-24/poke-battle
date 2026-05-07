@@ -66,16 +66,43 @@ export class PokemonListComponent {
     const pagePokemon = this.pokemonList.slice(start, end)
 
     this.listContainer.innerHTML = ""
+    this.listContainer.append(new LoaderComponent("Cargando Pokemon...").render())
 
-    // Por cada Pokemon creamos un boton con DOM.
-    pagePokemon.forEach((pokemon) => {
-      const button = document.createElement("button")
-      button.className = "pokemon-list__button"
-      button.textContent = pokemon.name
+    Promise.all(pagePokemon.map((pokemon) => this.pokemonService.getPokemonByName(pokemon.name))).then((detailedPokemonList) => {
+      this.listContainer.innerHTML = ""
 
-      // Al hacer click consultamos el detalle completo de ese Pokemon.
-      button.addEventListener("click", () => this.selectPokemon(pokemon.name))
-      this.listContainer.append(button)
+      // Por cada Pokemon creamos una mini tarjeta clickeable.
+      detailedPokemonList.forEach((pokemon) => {
+        const button = document.createElement("button")
+        button.type = "button"
+        const pokemonId = pokemon.id.toString().padStart(3, "0")
+        const pokemonType = pokemon.types[0] || "normal"
+        let types = ""
+
+        for (let i = 0; i < pokemon.types.length; i += 1) {
+          const type = pokemon.types[i]
+          types += `<span class="${type} pokemon-list__type pokemon-list__type--white">${type}</span>`
+        }
+
+        button.className = "pokemon-list__button pokemon-list__card"
+        button.style.setProperty("--pokemon-list-color", `var(--type-${pokemonType})`)
+        button.innerHTML = `
+          <div class="pokemon-list__side pokemon-list__side--color">
+          </div>
+          <div class="pokemon-list__side pokemon-list__side--white">
+            <span class="pokemon-list__id">#${pokemonId}</span>
+            <strong class="pokemon-list__name">${pokemon.name}</strong>
+            <div class="pokemon-list__types">
+              ${types}
+            </div>
+          </div>
+          <img class="pokemon-list__image" src="${pokemon.image}" alt="${pokemon.name}">
+        `
+
+        // Al hacer click consultamos el detalle completo de ese Pokemon.
+        button.addEventListener("click", () => this.selectPokemon(pokemon.name))
+        this.listContainer.append(button)
+      })
     })
 
     this.pagination.update(this.page, this.maxPage)
