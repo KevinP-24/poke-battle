@@ -1,6 +1,6 @@
 import { PaginationComponent } from "./PaginationComponent.js"
 import { LoaderComponent } from "./LoaderComponent.js"
-import { FIRST_GEN_POKEMON_COUNT } from "../utils/constants.js"
+import { CANTIDAD_MAXIMA } from "../utils/constants.js"
 
 export class PokemonListComponent {
   constructor({ title, pokemonService, onSelect }) {
@@ -12,7 +12,7 @@ export class PokemonListComponent {
     // Estado sencillo para controlar la paginacion.
     this.page = 1
     this.limit = 8
-    this.maxPage = Math.ceil(FIRST_GEN_POKEMON_COUNT / this.limit)
+    this.maxPage = Math.ceil(CANTIDAD_MAXIMA / this.limit)
     this.pokemonList = []
 
     // Elementos base que se van a reutilizar.

@@ -2,4 +2,4 @@
 export const POKE_API_URL = "https://pokeapi.co/api/v2/pokemon"
 
 // Primera generacion completa de Pokemon.
-export const FIRST_GEN_POKEMON_COUNT = 151
+export const CANTIDAD_MAXIMA = 151
