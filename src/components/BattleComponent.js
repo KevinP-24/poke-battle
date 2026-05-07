@@ -82,7 +82,9 @@ export class BattleComponent {
     this.historyContainer.innerHTML = "<h2>Historial de batallas</h2><p>No hay batallas guardadas.</p>"
 
     this.element.append(escenario, simulateButton, listas, this.historyContainer)
-
+    
+    this.renderHistory();
+    
     // Cargamos una sola vez la primera generacion y la compartimos en las dos listas.
     this.pokemonService.getPokemonList(151, 0).then((list) => {
       listOne.setPokemonList(list)
@@ -90,6 +92,27 @@ export class BattleComponent {
       listOne.loadPage()
       listTwo.loadPage()
     })
+    // Alternativa persistendolos en el local storage
+    // this.pokemonService.getPokemonList(151, 0).then((list) => {
+    //   listOne.setPokemonList(list)
+    //   listTwo.setPokemonList(list)
+    //   listOne.loadPage()
+    //   listTwo.loadPage()
+
+    //   const selectedPokemon1 = this.storageService.get("selectedPokemon1")
+    //   const selectedPokemon2 = this.storageService.get("selectedPokemon2")
+    //   if (selectedPokemon1) {
+    //     this.pokemonService.getPokemonByName(selectedPokemon1).then((pokemon) => {
+    //       this.selectPokemonOne(pokemon)
+    //     })
+    //   }
+
+    //   if (selectedPokemon2) {
+    //     this.pokemonService.getPokemonByName(selectedPokemon2).then((pokemon) => {
+    //       this.selectPokemonTwo(pokemon)
+    //     })
+    //   }
+    // })
 
     return this.element
   }
