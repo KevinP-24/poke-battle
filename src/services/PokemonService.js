@@ -1,18 +1,18 @@
-import { POKE_API_URL } from "../utils/constants.js"
+import { URL_POKEAPI } from "../utils/constants.js"
 import { PokemonAdapter } from "../adapters/PokemonAdapter.js"
 
 export class PokemonService {
-  getPokemonList(limit, offset) {
-    // Pedimos una lista paginada de Pokemon a la API.
-    return fetch(`${POKE_API_URL}?limit=${limit}&offset=${offset}`)
+  obtenerListaPrimeraGeneracion() {
+    // Pedimos directamente los 151 Pokemon de la primera generacion.
+    return fetch(`${URL_POKEAPI}?limit=151`)
       .then((response) => response.json())
       .then((data) => data.results)
   }
 
-  getPokemonByName(name) {
+  obtenerPokemonPorNombre(nombre) {
     // Pedimos el detalle de un Pokemon y luego lo pasamos por el Adapter.
-    return fetch(`${POKE_API_URL}/${name}`)
+    return fetch(`${URL_POKEAPI}/${nombre}`)
       .then((response) => response.json())
-      .then((data) => PokemonAdapter.adapt(data))
+      .then((data) => PokemonAdapter.adaptar(data))
   }
 }

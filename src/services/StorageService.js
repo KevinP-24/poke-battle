@@ -1,34 +1,34 @@
 export class StorageService {
-  save(key, value) {
+  guardar(clave, valor) {
     // localStorage solo guarda texto, por eso usamos JSON.stringify.
-    localStorage.setItem(key, JSON.stringify(value))
+    localStorage.setItem(clave, JSON.stringify(valor))
   }
 
-  remove(key) {
+  eliminar(clave) {
     // Eliminamos un dato guardado.
-    localStorage.removeItem(key)
+    localStorage.removeItem(clave)
   }
 
-  get(key, defaultValue) {
+  obtener(clave, valorPorDefecto) {
     // Buscamos un dato. Si no existe, devolvemos un valor por defecto.
-    const savedValue = localStorage.getItem(key)
+    const valorGuardado = localStorage.getItem(clave)
 
-    if (!savedValue) {
-      return defaultValue
+    if (!valorGuardado) {
+      return valorPorDefecto
     }
 
-    return JSON.parse(savedValue)
+    return JSON.parse(valorGuardado)
   }
 
-  addBattle(battle) {
+  agregarBatalla(batalla) {
     // Traemos el historial, agregamos la nueva batalla al inicio y guardamos.
-    const history = this.getBattles()
-    history.unshift(battle)
-    localStorage.setItem("battleHistory", JSON.stringify(history))
+    const historial = this.obtenerBatallas()
+    historial.unshift(batalla)
+    localStorage.setItem("historialBatallas", JSON.stringify(historial))
   }
 
-  getBattles() {
+  obtenerBatallas() {
     // Si no hay historial, devolvemos un arreglo vacio.
-    return this.get("battleHistory", [])
+    return this.obtener("historialBatallas", [])
   }
 }

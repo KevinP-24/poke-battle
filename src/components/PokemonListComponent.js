@@ -2,90 +2,104 @@ import { PaginationComponent } from "./PaginationComponent.js"
 import { LoaderComponent } from "./LoaderComponent.js"
 
 export class PokemonListComponent {
-  constructor({ title, pokemonService, onSelect }) {
+  constructor({ titulo, pokemonService, onSelect }) {
     // Datos que necesita la lista para funcionar.
-    this.title = title
+    this.titulo = titulo
     this.pokemonService = pokemonService
     this.onSelect = onSelect
 
     // Estado sencillo para controlar la paginacion.
-    this.page = 1
-    this.limit = 8
+    this.pagina = 1
+    this.limite = 8
+    this.paginaMaxima = 1
+    this.listaPokemon = []
 
     // Elementos base que se van a reutilizar.
-    this.element = document.createElement("section")
-    this.listContainer = document.createElement("div")
+    this.elemento = document.createElement("section")
+    this.contenedorLista = document.createElement("div")
   }
 
   render() {
     // Cada vez que renderizamos, limpiamos el componente.
-    this.element.className = "pokemon-list"
-    this.element.innerHTML = ""
+    this.elemento.className = "pokemon-list"
+    this.elemento.innerHTML = ""
 
-    const title = document.createElement("h2")
-    title.textContent = this.title
+    const titulo = document.createElement("h2")
+    titulo.textContent = this.titulo
 
     // Aqui se van a insertar los botones de cada Pokemon.
-    this.listContainer.className = "pokemon-list__items"
+    this.contenedorLista.className = "pokemon-list__items"
 
     // La paginacion recibe funciones para cambiar de pagina.
     this.pagination = new PaginationComponent({
-      getPage: () => this.page,
-      onPrev: this.prevPage.bind(this),
-      onNext: this.nextPage.bind(this),
+      irAnterior: this.paginaAnterior.bind(this),
+      irSiguiente: this.paginaSiguiente.bind(this),
     })
 
-    this.element.append(title, this.listContainer, this.pagination.render())
+    this.elemento.append(titulo, this.contenedorLista, this.pagination.render())
 
-    return this.element
+    return this.elemento
   }
 
-  loadPage() {
-    const loader = new LoaderComponent("Cargando Pokemon...")
+  establecerListaPokemon(listaPokemon) {
+    this.listaPokemon = listaPokemon
+    this.paginaMaxima = Math.ceil(this.listaPokemon.length / this.limite)
+  }
 
-    // Offset le dice a la API desde que Pokemon empezar.
-    const offset = (this.page - 1) * this.limit
+  cargarPagina() {
+    if (!this.listaPokemon.length) {
+      const cargador = new LoaderComponent("Cargando Pokemon...")
+      this.contenedorLista.innerHTML = ""
+      this.contenedorLista.append(cargador.render())
+      return
+    }
 
-    // Mostramos cargando mientras llega la respuesta de la API.
-    this.listContainer.innerHTML = ""
-    this.listContainer.append(loader.render())
+    this.renderizarPagina()
+  }
 
-    this.pokemonService.getPokemonList(this.limit, offset).then((list) => {
-      this.listContainer.innerHTML = ""
+  renderizarPagina() {
+    const inicio = (this.pagina - 1) * this.limite
+    const fin = inicio + this.limite
+    const pokemonPagina = this.listaPokemon.slice(inicio, fin)
 
-      // Por cada Pokemon creamos un boton con DOM.
-      list.forEach((pokemon) => {
-        const button = document.createElement("button")
-        button.className = "pokemon-list__button"
-        button.textContent = pokemon.name
+    this.contenedorLista.innerHTML = ""
 
-        // Al hacer click consultamos el detalle completo de ese Pokemon.
-        button.addEventListener("click", () => this.selectPokemon(pokemon.name))
-        this.listContainer.append(button)
-      })
+    // Por cada Pokemon creamos un boton con DOM.
+    pokemonPagina.forEach((pokemon) => {
+      const boton = document.createElement("button")
+      boton.className = "pokemon-list__button"
+      boton.textContent = pokemon.name
 
-      this.pagination.update(this.page)
+      // Al hacer click consultamos el detalle completo de ese Pokemon.
+      boton.addEventListener("click", () => this.seleccionarPokemon(pokemon.name))
+      this.contenedorLista.append(boton)
     })
+
+    this.pagination.update(this.pagina, this.paginaMaxima)
   }
 
-  selectPokemon(name) {
+  seleccionarPokemon(nombre) {
     // Pedimos el detalle del Pokemon y avisamos al componente padre.
-    this.pokemonService.getPokemonByName(name).then((pokemon) => {
+    this.pokemonService.obtenerPokemonPorNombre(nombre).then((pokemon) => {
       this.onSelect(pokemon)
     })
   }
 
-  prevPage() {
+  paginaAnterior() {
     // Solo podemos retroceder si no estamos en la pagina 1.
-    if (this.page > 1) {
-      this.page = this.page - 1
-      this.loadPage()
+    if (this.pagina > 1) {
+      this.pagina = this.pagina - 1
+      this.cargarPagina()
     }
   }
 
-  nextPage() {
+  paginaSiguiente() {
     // Avanzamos una pagina y volvemos a pedir datos a la API.
-    this.page = this.page + 1
-    this.loadPage()
+    if (this.pagina >= this.paginaMaxima) {
+      return
+    }
+
+    this.pagina = this.pagina + 1
+    this.cargarPagina()
   }
 }

@@ -4,39 +4,35 @@ import { StorageService } from "./services/StorageService.js"
 import { ThemeService } from "./services/ThemeService.js"
 
 export class App {
-  constructor(root) {
-    // Guardamos el contenedor principal donde se va a mostrar la app.
-    this.root = root
+  constructor(contenedorPrincipal) {
+    this.contenedorPrincipal = contenedorPrincipal
 
-    // Creamos servicios que se usan desde el inicio de la aplicacion.
-    this.storageService = new StorageService()
-    this.themeService = new ThemeService(this.storageService)
+    this.servicioAlmacenamiento = new StorageService()
+    this.servicioTema = new ThemeService(this.servicioAlmacenamiento)
   }
 
   render() {
-    this.themeService.loadTheme()
+    this.servicioTema.cargarTema()
 
-    const page = document.createElement("div")
-    page.className = "app"
+    const pagina = document.createElement("div")
+    pagina.className = "app"
 
-    const header = document.createElement("header")
-    header.className = "app-header"
-    //Creacion de imagen con el DOM
-    const titleImage = document.createElement("img");
-    titleImage.src = "./assets/images/batalla.png"; 
-    titleImage.alt = "Pokemon Battle";
-    titleImage.className = "app-logo"; // Opcional: para darle estilos en CSS
+    const encabezado = document.createElement("header")
+    encabezado.className = "app-header"
+    const imagenTitulo = document.createElement("img")
+    imagenTitulo.src = "./assets/images/batalla.png"
+    imagenTitulo.alt = "Batalla Pokemon"
+    imagenTitulo.className = "app-logo"
 
-    const themeToggle = new ThemeToggleComponent(this.themeService)
+    const botonTema = new ThemeToggleComponent(this.servicioTema)
 
-    // 2. Agregamos la imagen al header (quitamos 'title')
-    header.append(titleImage, themeToggle.render())
+    encabezado.append(imagenTitulo, botonTema.render())
 
-    const battleComponent = new BattleComponent()
+    const componenteBatalla = new BattleComponent()
 
-    page.append(header, battleComponent.render())
+    pagina.append(encabezado, componenteBatalla.render())
 
-    this.root.innerHTML = ""
-    this.root.append(page)
+    this.contenedorPrincipal.innerHTML = ""
+    this.contenedorPrincipal.append(pagina)
   }
 }

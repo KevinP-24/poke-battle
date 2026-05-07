@@ -1,67 +1,67 @@
 import { PokemonCardComponent } from "./PokemonCardComponent.js"
 
 export class ResultModalComponent {
-  constructor({ title, message = "", result = null, pokemonOne = null, pokemonTwo = null, winnerPokemon = null }) {
+  constructor({ titulo, mensaje = "", resultado = null, pokemonUno = null, pokemonDos = null, pokemonGanador = null }) {
     // El modal puede mostrar un mensaje simple o un resultado de batalla.
-    this.title = title
-    this.message = message
-    this.result = result
-    this.pokemonOne = pokemonOne
-    this.pokemonTwo = pokemonTwo
-    this.winnerPokemon = winnerPokemon
-    this.element = document.createElement("div")
+    this.titulo = titulo
+    this.mensaje = mensaje
+    this.resultado = resultado
+    this.pokemonUno = pokemonUno
+    this.pokemonDos = pokemonDos
+    this.pokemonGanador = pokemonGanador
+    this.elemento = document.createElement("div")
   }
 
   render() {
     // Capa oscura que cubre la pagina.
-    this.element.className = "modal"
+    this.elemento.className = "modal"
 
     // Caja blanca del modal.
     const content = document.createElement("div")
     content.className = "modal__content"
 
-    const title = document.createElement("h2")
-    title.textContent = this.title
+    const titulo = document.createElement("h2")
+    titulo.textContent = this.titulo
 
     // Aqui va el texto o la card del ganador.
     const body = document.createElement("div")
     body.className = "modal__body"
 
-    if (this.result) {
+    if (this.resultado) {
       // Si hay ganador, mostramos su card reutilizando PokemonCardComponent.
-      if (this.winnerPokemon) {
-        const winnerCard = document.createElement("div")
-        winnerCard.className = "modal__winner-card"
-        winnerCard.append(new PokemonCardComponent(this.winnerPokemon).render())
-        body.append(winnerCard)
+      if (this.pokemonGanador) {
+        const cardGanadora = document.createElement("div")
+        cardGanadora.className = "modal__winner-card"
+        cardGanadora.append(new PokemonCardComponent(this.pokemonGanador).render())
+        body.append(cardGanadora)
       }
 
       // Informacion resumida del resultado.
-      const resultInfo = document.createElement("div")
-      resultInfo.className = "modal__result-info"
-      resultInfo.innerHTML = `
+      const informacionResultado = document.createElement("div")
+      informacionResultado.className = "modal__result-info"
+      informacionResultado.innerHTML = `
         <span class="modal__label">Pokemon ganador</span>
-        <h3>${this.result.winner}</h3>
+        <h3>${this.resultado.ganador}</h3>
         <div class="modal__scores">
-          <p><span>${this.pokemonOne.name}</span><strong>${this.result.score1}</strong></p>
-          <p><span>${this.pokemonTwo.name}</span><strong>${this.result.score2}</strong></p>
+          <p><span>${this.pokemonUno.nombre}</span><strong>${this.resultado.puntajeUno}</strong></p>
+          <p><span>${this.pokemonDos.nombre}</span><strong>${this.resultado.puntajeDos}</strong></p>
         </div>
-        <p class="modal__reason">${this.result.reason}</p>
+        <p class="modal__reason">${this.resultado.motivo}</p>
       `
-      body.append(resultInfo)
+      body.append(informacionResultado)
     } else {
-      body.textContent = this.message
+      body.textContent = this.mensaje
     }
 
     // Boton para cerrar el modal eliminandolo del DOM.
-    const closeButton = document.createElement("button")
-    closeButton.className = "primary-button"
-    closeButton.textContent = "Cerrar"
-    closeButton.addEventListener("click", () => this.element.remove())
+    const botonCerrar = document.createElement("button")
+    botonCerrar.className = "primary-button"
+    botonCerrar.textContent = "Cerrar"
+    botonCerrar.addEventListener("click", () => this.elemento.remove())
 
-    content.append(title, body, closeButton)
-    this.element.append(content)
+    content.append(titulo, body, botonCerrar)
+    this.elemento.append(content)
 
-    return this.element
+    return this.elemento
   }
 }

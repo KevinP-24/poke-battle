@@ -1,37 +1,33 @@
 export class ThemeToggleComponent {
-  constructor(themeService) {
-    this.themeService = themeService
-    this.element = document.createElement("button")
+  constructor(servicioTema) {
+    this.servicioTema = servicioTema
+    this.elemento = document.createElement("button")
   }
   render() {
-    this.element.className = "theme-button"
-    this.element.innerHTML = `
+    this.elemento.className = "theme-button"
+    this.elemento.innerHTML = `
       <span class="theme-button__indicator">
         <span class="theme-button__icon-container">
           <i class="theme-button__icon fa-solid"></i>
         </span>
       </span>
     `
-    this.updateIcon()
-    this.element.addEventListener("click", () => {
-      this.themeService.toggleTheme()
-      const icon = this.element.querySelector(".theme-button__icon")
-      icon.classList.add("animated")
-      this.updateIcon()
-      setTimeout(() => {
-        icon.classList.remove("animated")
-      }, 500)
+    this.actualizarIcono()
+    this.elemento.addEventListener("click", () => {
+      this.servicioTema.cambiarTema()
+      this.actualizarIcono()
     })
-    return this.element
+    return this.elemento
   }
-  updateIcon() {
-    const icon = this.element.querySelector(".theme-button__icon")
-    const theme = document.documentElement.dataset.theme
-    icon.classList.remove("fa-sun", "fa-moon")
-    if (theme === "dark") {
-      icon.classList.add("fa-moon")
+
+  actualizarIcono() {
+    const icono = this.elemento.querySelector(".theme-button__icon")
+    const tema = document.documentElement.dataset.theme
+    icono.classList.remove("fa-sun", "fa-moon")
+    if (tema === "dark") {
+      icono.classList.add("fa-moon")
     } else {
-      icon.classList.add("fa-sun")
+      icono.classList.add("fa-sun")
     }
   }
 }

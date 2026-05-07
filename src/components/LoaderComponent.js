@@ -1,14 +1,14 @@
 export class LoaderComponent {
-  constructor(text = "Cargando...") {
+  constructor(texto = "Cargando...") {
     // Texto que queremos mostrar mientras carga la API.
-    this.text = text
-    this.element = document.createElement("p")
+    this.texto = texto
+    this.elemento = document.createElement("p")
   }
 
   render() {
     // Este componente solo crea un parrafo sencillo de carga.
-    this.element.className = "loader"
-    this.element.textContent = this.text
-    return this.element
+    this.elemento.className = "loader"
+    this.elemento.textContent = this.texto
+    return this.elemento
   }
 }

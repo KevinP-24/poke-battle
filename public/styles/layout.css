@@ -8,11 +8,24 @@
 
 /* Header superior: titulo a la izquierda y boton de tema a la derecha. */
 .app-header {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  justify-content: space-between;
   gap: 16px;
   margin-bottom: 24px;
+  width: 100%;
+}
+
+/* El logo queda exactamente en el centro del header. */
+.app-header .app-logo {
+  grid-column: 2;
+  justify-self: center;
+}
+
+/* El boton de tema se alinea al extremo derecho. */
+.app-header .theme-button {
+  grid-column: 3;
+  justify-self: end;
 }
 
 /* La batalla completa se organiza en filas con espacio entre secciones. */
@@ -46,12 +59,12 @@
   z-index: 2;
 }
 
-/* Pokemon 1 queda a la izquierda. */
+/* Pokemon uno queda a la izquierda. */
 .battle-arena__player--left {
   justify-content: flex-start;
 }
 
-/* Pokemon 2 queda a la derecha. */
+/* Pokemon dos queda a la derecha. */
 .battle-arena__player--right {
   justify-content: flex-end;
 }

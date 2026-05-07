@@ -4,188 +4,189 @@ import { ResultModalComponent } from "./ResultModalComponent.js"
 import { BattleService } from "../services/BattleService.js"
 import { PokemonService } from "../services/PokemonService.js"
 import { StorageService } from "../services/StorageService.js"
-import { BalancedStrategy } from "../strategies/BalancedStrategy.js"
 
 export class BattleComponent {
   constructor() {
     // Este es el componente principal de la batalla.
-    this.element = document.createElement("main")
+    this.elemento = document.createElement("main")
 
     // Servicios que usa la batalla.
-    this.pokemonService = new PokemonService()
-    this.storageService = new StorageService()
-    this.battleService = new BattleService(new BalancedStrategy())
+    this.servicioPokemon = new PokemonService()
+    this.servicioAlmacenamiento = new StorageService()
+    this.servicioBatalla = new BattleService()
 
     // Aqui guardamos los dos Pokemon seleccionados.
-    this.pokemonOne = null
-    this.pokemonTwo = null
+    this.pokemonUno = null
+    this.pokemonDos = null
   }
 
   render() {
     // Limpiamos y volvemos a construir la vista principal.
-    this.element.className = "battle"
-    this.element.innerHTML = ""
+    this.elemento.className = "battle"
+    this.elemento.innerHTML = ""
 
     // Arena donde se ven las dos cards y el VS.
-    const arena = document.createElement("section")
-    arena.className = "battle-arena"
+    const escenario = document.createElement("section")
+    escenario.className = "battle-arena"
 
     // Contenedores separados para poder actualizar cada lado.
-    this.cardOneContainer = document.createElement("div")
-    this.cardTwoContainer = document.createElement("div")
-    this.cardOneContainer.className = "battle-arena__player battle-arena__player--left"
-    this.cardTwoContainer.className = "battle-arena__player battle-arena__player--right"
+    this.contenedorPokemonUno = document.createElement("div")
+    this.contenedorPokemonDos = document.createElement("div")
+    this.contenedorPokemonUno.className = "battle-arena__player battle-arena__player--left"
+    this.contenedorPokemonDos.className = "battle-arena__player battle-arena__player--right"
 
-    this.cardOneContainer.append(new PokemonCardComponent().render())
-    this.cardTwoContainer.append(new PokemonCardComponent().render())
+    this.contenedorPokemonUno.append(new PokemonCardComponent().render())
+    this.contenedorPokemonDos.append(new PokemonCardComponent().render())
 
     // Imagen de VS creada tambien desde JavaScript.
-    const versus = document.createElement("img")
-    versus.className = "versus"
-    versus.src = "./assets/images/vs.webp"
-    versus.alt = "VS"
+    const imagenVS = document.createElement("img")
+    imagenVS.className = "versus"
+    imagenVS.src = "./assets/images/vs.webp"
+    imagenVS.alt = "VS"
 
-    arena.append(this.cardOneContainer, versus, this.cardTwoContainer)
+    escenario.append(this.contenedorPokemonUno, imagenVS, this.contenedorPokemonDos)
 
     // Boton que ejecuta la simulacion de batalla.
-    const simulateButton = document.createElement("button")
-    simulateButton.className = "primary-button"
-    simulateButton.textContent = "Simular batalla"
-    simulateButton.addEventListener("click", this.simulateBattle.bind(this))
+    const botonSimular = document.createElement("button")
+    botonSimular.className = "primary-button"
+    botonSimular.textContent = "Simular batalla"
+    botonSimular.addEventListener("click", this.simularBatalla.bind(this))
 
     // Seccion donde estan las dos listas de seleccion.
-    const lists = document.createElement("section")
-    lists.className = "selection-grid"
+    const listas = document.createElement("section")
+    listas.className = "selection-grid"
 
-    const listOne = new PokemonListComponent({
-      title: "Pokemon 1",
-      pokemonService: this.pokemonService,
-      onSelect: this.selectPokemonOne.bind(this),
+    const listaUno = new PokemonListComponent({
+      titulo: "Pokemon Uno",
+      pokemonService: this.servicioPokemon,
+      onSelect: this.seleccionarPokemonUno.bind(this),
     })
 
-    const listTwo = new PokemonListComponent({
-      title: "Pokemon 2",
-      pokemonService: this.pokemonService,
-      onSelect: this.selectPokemonTwo.bind(this),
+    const listaDos = new PokemonListComponent({
+      titulo: "Pokemon Dos",
+      pokemonService: this.servicioPokemon,
+      onSelect: this.seleccionarPokemonDos.bind(this),
     })
 
-    lists.append(listOne.render(), listTwo.render())
+    listas.append(listaUno.render(), listaDos.render())
 
     // Historial basico de batallas guardadas en localStorage.
-    this.historyContainer = document.createElement("section")
-    this.historyContainer.className = "history"
-    this.historyContainer.innerHTML = "<h2>Historial de batallas</h2><p>No hay batallas guardadas.</p>"
+    this.contenedorHistorial = document.createElement("section")
+    this.contenedorHistorial.className = "history"
+    this.contenedorHistorial.innerHTML = "<h2>Historial de batallas</h2><p>No hay batallas guardadas.</p>"
 
-    this.element.append(arena, simulateButton, lists, this.historyContainer)
+    this.elemento.append(escenario, botonSimular, listas, this.contenedorHistorial)
 
-    // Cargamos la primera pagina de cada lista.
-    listOne.loadPage()
-    listTwo.loadPage()
+    // Cargamos una sola vez la primera generacion y la compartimos en las dos listas.
+    this.servicioPokemon.obtenerListaPrimeraGeneracion().then((listaPokemon) => {
+      listaUno.establecerListaPokemon(listaPokemon)
+      listaDos.establecerListaPokemon(listaPokemon)
+      listaUno.cargarPagina()
+      listaDos.cargarPagina()
+    })
 
-    return this.element
+    return this.elemento
   }
 
-  selectPokemonOne(pokemon) {
-    // Guardamos el Pokemon 1 en memoria y en localStorage.
-    this.pokemonOne = pokemon
-    this.storageService.save("selectedPokemon1", pokemon.name)
+  seleccionarPokemonUno(pokemon) {
+    // Guardamos el Pokemon uno en memoria y en localStorage.
+    this.pokemonUno = pokemon
+    this.servicioAlmacenamiento.guardar("pokemonSeleccionadoUno", pokemon.nombre)
 
     // Reemplazamos la card vacia por la card del Pokemon seleccionado.
-    this.cardOneContainer.innerHTML = ""
-    this.cardOneContainer.append(new PokemonCardComponent(pokemon).render())
+    this.contenedorPokemonUno.innerHTML = ""
+    this.contenedorPokemonUno.append(new PokemonCardComponent(pokemon).render())
   }
 
-  selectPokemonTwo(pokemon) {
-    // Guardamos el Pokemon 2 en memoria y en localStorage.
-    this.pokemonTwo = pokemon
-    this.storageService.save("selectedPokemon2", pokemon.name)
+  seleccionarPokemonDos(pokemon) {
+    // Guardamos el Pokemon dos en memoria y en localStorage.
+    this.pokemonDos = pokemon
+    this.servicioAlmacenamiento.guardar("pokemonSeleccionadoDos", pokemon.nombre)
 
     // Reemplazamos la card vacia por la card del Pokemon seleccionado.
-    this.cardTwoContainer.innerHTML = ""
-    this.cardTwoContainer.append(new PokemonCardComponent(pokemon).render())
+    this.contenedorPokemonDos.innerHTML = ""
+    this.contenedorPokemonDos.append(new PokemonCardComponent(pokemon).render())
   }
 
-  simulateBattle() {
+  simularBatalla() {
     // Validamos que existan dos Pokemon antes de calcular.
-    if (!this.pokemonOne || !this.pokemonTwo) {
+    if (!this.pokemonUno || !this.pokemonDos) {
       const modal = new ResultModalComponent({
-        title: "Faltan Pokemon",
-        message: "Selecciona dos Pokemon antes de simular la batalla.",
+        titulo: "Faltan Pokemon",
+        mensaje: "Selecciona dos Pokemon antes de simular la batalla.",
       })
       document.body.append(modal.render())
       return
     }
 
-    // BattleService usa la estrategia para calcular el ganador.
-    const result = this.battleService.battle(this.pokemonOne, this.pokemonTwo)
-    let winnerPokemon = null
+    // BattleService calcula el ganador con una regla simple.
+    const resultado = this.servicioBatalla.resolverBatalla(this.pokemonUno, this.pokemonDos)
+    let pokemonGanador = null
 
-    // Buscamos el objeto completo del ganador para mostrar su card en el modal.
-    if (result.winner === this.pokemonOne.name) {
-      winnerPokemon = this.pokemonOne
-    }
-
-    if (result.winner === this.pokemonTwo.name) {
-      winnerPokemon = this.pokemonTwo
+    // Buscamos el Pokemon completo del ganador para mostrar su card en el modal.
+    if (resultado.ganador === this.pokemonUno.nombre) {
+      pokemonGanador = this.pokemonUno
+    } else if (resultado.ganador === this.pokemonDos.nombre) {
+      pokemonGanador = this.pokemonDos
     }
 
     // Registro sencillo para guardar en el historial.
-    const battleRecord = {
-      pokemon1: this.pokemonOne.name,
-      pokemon2: this.pokemonTwo.name,
-      winner: result.winner,
-      reason: result.reason,
-      date: new Date().toLocaleDateString(),
+    const registroBatalla = {
+      pokemon1: this.pokemonUno.nombre,
+      pokemon2: this.pokemonDos.nombre,
+      ganador: resultado.ganador,
+      motivo: resultado.motivo,
+      fecha: new Date().toLocaleDateString(),
     }
 
-    this.storageService.addBattle(battleRecord)
+    this.servicioAlmacenamiento.agregarBatalla(registroBatalla)
 
     // Creamos el modal con el resultado y la card del ganador.
     const modal = new ResultModalComponent({
-      title: "Resultado de la batalla",
-      result,
-      pokemonOne: this.pokemonOne,
-      pokemonTwo: this.pokemonTwo,
-      winnerPokemon,
+      titulo: "Resultado de la batalla",
+      resultado,
+      pokemonUno: this.pokemonUno,
+      pokemonDos: this.pokemonDos,
+      pokemonGanador,
     })
 
     document.body.append(modal.render())
-    this.renderHistory()
+    this.renderizarHistorial()
 
     // Dejamos la arena limpia para una nueva batalla.
-    this.cleanArena()
+    this.limpiarEscenario()
   }
 
-  cleanArena() {
+  limpiarEscenario() {
     // Borramos seleccionados de memoria y localStorage.
-    this.pokemonOne = null
-    this.pokemonTwo = null
-    this.storageService.remove("selectedPokemon1")
-    this.storageService.remove("selectedPokemon2")
+    this.pokemonUno = null
+    this.pokemonDos = null
+    this.servicioAlmacenamiento.eliminar("pokemonSeleccionadoUno")
+    this.servicioAlmacenamiento.eliminar("pokemonSeleccionadoDos")
 
     // Volvemos a mostrar cards vacias.
-    this.cardOneContainer.innerHTML = ""
-    this.cardTwoContainer.innerHTML = ""
-    this.cardOneContainer.append(new PokemonCardComponent().render())
-    this.cardTwoContainer.append(new PokemonCardComponent().render())
+    this.contenedorPokemonUno.innerHTML = ""
+    this.contenedorPokemonDos.innerHTML = ""
+    this.contenedorPokemonUno.append(new PokemonCardComponent().render())
+    this.contenedorPokemonDos.append(new PokemonCardComponent().render())
   }
 
-  renderHistory() {
+  renderizarHistorial() {
     // Leemos las batallas guardadas y las pintamos en pantalla.
-    const history = this.storageService.getBattles()
-    this.historyContainer.innerHTML = "<h2>Historial de batallas</h2>"
+    const historial = this.servicioAlmacenamiento.obtenerBatallas()
+    this.contenedorHistorial.innerHTML = "<h2>Historial de batallas</h2>"
 
-    if (history.length === 0) {
-      const empty = document.createElement("p")
-      empty.textContent = "No hay batallas guardadas."
-      this.historyContainer.append(empty)
+    if (historial.length === 0) {
+      const vacio = document.createElement("p")
+      vacio.textContent = "No hay batallas guardadas."
+      this.contenedorHistorial.append(vacio)
       return
     }
 
-    history.forEach((battle) => {
+    historial.forEach((batalla) => {
       const item = document.createElement("p")
-      item.textContent = `${battle.pokemon1} vs ${battle.pokemon2} - Ganador: ${battle.winner}`
-      this.historyContainer.append(item)
+      item.textContent = `${batalla.pokemon1} vs ${batalla.pokemon2} - Ganador: ${batalla.ganador}`
+      this.contenedorHistorial.append(item)
     })
   }
 }
