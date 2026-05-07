@@ -5,6 +5,7 @@ import { BattleService } from "../services/BattleService.js"
 import { PokemonService } from "../services/PokemonService.js"
 import { StorageService } from "../services/StorageService.js"
 import { BalancedStrategy } from "../strategies/BalancedStrategy.js"
+import { SpeedStrategy } from "../strategies/SpeedStrategy.js"
 
 export class BattleComponent {
   constructor() {
@@ -14,6 +15,7 @@ export class BattleComponent {
     // Servicios que usa la batalla.
     this.pokemonService = new PokemonService()
     this.storageService = new StorageService()
+    // Se puede selecionar por que factor o condiciones decidir el ganador del combate pokemon
     this.battleService = new BattleService(new BalancedStrategy())
 
     // Aqui guardamos los dos Pokemon seleccionados.
@@ -23,8 +25,8 @@ export class BattleComponent {
 
   render() {
     // Limpiamos y volvemos a construir la vista principal.
-    this.element.className = "battle"
     this.element.innerHTML = ""
+    this.element.className = "battle"
 
     // Arena donde se ven las dos cards y el VS.
     const escenario = document.createElement("section")
@@ -53,6 +55,9 @@ export class BattleComponent {
     simulateButton.textContent = "Simular batalla"
     simulateButton.addEventListener("click", this.simulateBattle.bind(this))
 
+
+
+    // Parte inferior del aplicativo
     // Seccion donde estan las dos listas de seleccion.
     const listas = document.createElement("section")
     listas.className = "selection-grid"
@@ -88,7 +93,7 @@ export class BattleComponent {
 
     return this.element
   }
-
+  // !!!! Pilas no se esta guardando la secion del pokemon en el local storage
   selectPokemonOne(pokemon) {
     // Guardamos el Pokemon uno en memoria y en localStorage.
     this.pokemonOne = pokemon
@@ -98,7 +103,7 @@ export class BattleComponent {
     this.cardOneContainer.innerHTML = ""
     this.cardOneContainer.append(new PokemonCardComponent(pokemon).render())
   }
-
+  // !!!! Pilas no se esta guardando la secion del pokemon en el local storage
   selectPokemonTwo(pokemon) {
     // Guardamos el Pokemon dos en memoria y en localStorage.
     this.pokemonTwo = pokemon

@@ -2,9 +2,9 @@ import { POKE_API_URL } from "../utils/constants.js"
 import { PokemonAdapter } from "../adapters/PokemonAdapter.js"
 
 export class PokemonService {
-  getPokemonList(limit, offset) {
+  getPokemonList(limite, inicio) {
     // Pedimos una lista paginada de Pokemon a la API.
-    return fetch(`${POKE_API_URL}?limit=${limit}&offset=${offset}`)
+    return fetch(`${POKE_API_URL}?limit=${limite}&offset=${inicio}`)
       .then((response) => response.json())
       .then((data) => data.results)
   }
