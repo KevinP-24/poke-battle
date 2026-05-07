@@ -1,757 +1,308 @@
 # Hoja de Ruta del Proyecto Web
 
-**Proyecto:** Pokémon Battle  
+**Proyecto:** Pokemon Battle  
 **Tema del componente:** Preguntar  
-**Tecnología:** HTML, CSS y JavaScript Vanilla  
-**API:** PokéAPI  
-**Enfoque:** Simulador de batalla Pokémon basado en estadísticas
+**Tecnologia:** HTML, CSS y JavaScript Vanilla  
+**API:** PokeAPI  
+**Enfoque:** Simulador de batalla Pokemon basado en estadisticas
 
 ---
 
-## 1. Descripción general
+## 1. Descripcion general
 
-El proyecto consiste en desarrollar un sitio web interactivo llamado **Pokémon Battle**, donde el usuario podrá seleccionar dos Pokémon desde listas paginadas, comparar sus estadísticas y simular una batalla.
+Pokemon Battle permite elegir dos Pokemon, compararlos y mostrar un ganador.
 
-La aplicación consumirá datos desde **PokéAPI**, manipulará el DOM con JavaScript, aplicará programación orientada a objetos, usará dos patrones de diseño, tendrá modo claro y modo oscuro, guardará información en `localStorage`, usará CSS Nesting y estará organizada por componentes.
-
----
-
-## 2. Idea principal del proyecto
-
-La aplicación no será una Pokédex tradicional. El objetivo será crear una experiencia tipo batalla.
-
-Flujo principal:
-
-```txt
-1. El usuario selecciona el Pokémon 1.
-2. El usuario selecciona el Pokémon 2.
-3. La aplicación consulta los datos desde PokéAPI.
-4. Se muestran las tarjetas de ambos Pokémon.
-5. El usuario presiona "Simular batalla".
-6. El sistema calcula un ganador según las estadísticas.
-7. Se muestra el resultado en un modal.
-8. La batalla se guarda en localStorage.
-9. El historial de batallas se muestra con paginación.
-```
+- Cumple: consume API, usa componentes y guarda datos locales.
+- Por que: la entrega pide una app interactiva basada en consulta y respuesta.
+- Donde: [`src/app.js`](/d:/Proyectos/poke-api/poke-battle/src/app.js), [`src/components/BattleComponent.js`](/d:/Proyectos/poke-api/poke-battle/src/components/BattleComponent.js), [`src/services/PokemonService.js`](/d:/Proyectos/poke-api/poke-battle/src/services/PokemonService.js).
 
 ---
 
-## 3. Relación con el tema del componente: Preguntar
+## 2. Idea principal
 
-El componente principal se puede interpretar como un componente de pregunta o consulta, ya que el usuario interactúa con el sistema para obtener una respuesta.
+La app no es una Pokedex, es una batalla entre dos Pokemon.
 
-Pregunta principal de la aplicación:
-
-```txt
-¿Qué Pokémon ganaría en una batalla basada en estadísticas?
-```
-
-El usuario selecciona dos Pokémon y el sistema responde mostrando:
-
-- Pokémon ganador.
-- Motivo del resultado.
-- Puntaje de cada Pokémon.
-- Comparación visual de estadísticas.
+- Cumple: el usuario selecciona dos Pokemon, simula la batalla y ve el resultado.
+- Por que: el tema del componente se responde con una pregunta clara: quien gana.
+- Donde: [`src/components/BattleComponent.js`](/d:/Proyectos/poke-api/poke-battle/src/components/BattleComponent.js).
 
 ---
 
-## 4. Requisitos del proyecto y cómo se cumplirán
+## 3. Relacion con el tema: Preguntar
 
-| Requisito | Implementación en el proyecto |
-|---|---|
-| Consumo de API | Se usará PokéAPI para obtener información de los Pokémon |
-| Sitio web con componentes | Se dividirá la interfaz en componentes reutilizables |
-| Arquitectura de carpetas | Se organizará el proyecto por carpetas: components, services, adapters, strategies, styles y utils |
-| 2 patrones de diseño | Se usarán Adapter y Strategy |
-| No Factory | No se implementará Factory |
-| No Singleton | No se implementará Singleton |
-| Modo claro y oscuro | Se hará con CSS custom properties y JavaScript |
-| Sistema de paginado | Se aplicará en las listas de selección y/o historial de batallas |
-| LocalStorage | Se guardará el tema, Pokémon seleccionados y últimas batallas |
-| CSS Nesting | Se usará nesting en los estilos de componentes |
-| Manipulación del DOM | Se crearán y actualizarán tarjetas, listas, modal y resultados |
-| POO en JavaScript | Se usarán clases para servicios, componentes, estrategias y almacenamiento |
+La app responde una consulta concreta: quien ganaria entre dos Pokemon.
+
+- Cumple: convierte la interaccion del usuario en una respuesta visual.
+- Por que: conecta el proyecto con el tema del componente.
+- Donde: [`src/components/ResultModalComponent.js`](/d:/Proyectos/poke-api/poke-battle/src/components/ResultModalComponent.js).
 
 ---
 
-## 5. Funcionalidades principales
+## 4. Requisitos clave
 
-### 5.1 Selección de Pokémon
-
-La aplicación tendrá dos zonas de selección:
-
-```txt
-Pokémon 1
-Pokémon 2
-```
-
-Cada zona permitirá:
-
-- Ver una lista de Pokémon.
-- Seleccionar un Pokémon.
-- Mostrar tarjetas pequeñas.
-- Navegar con paginación.
-- Filtrar por tipo, si se implementa como mejora.
+| Requisito | Cumple | Por que | Donde |
+|---|---|---|---|
+| Consumo de API | Si | Para traer lista y detalle de Pokemon | [`src/services/PokemonService.js`](/d:/Proyectos/poke-api/poke-battle/src/services/PokemonService.js) |
+| Componentes | Si | Para separar la interfaz por partes | [`src/components`](/d:/Proyectos/poke-api/poke-battle/src/components) |
+| Adapter | Si | Para limpiar la respuesta de PokeAPI | [`src/adapters/PokemonAdapter.js`](/d:/Proyectos/poke-api/poke-battle/src/adapters/PokemonAdapter.js) |
+| Strategy | Si | Para calcular el ganador sin mezclar la logica | [`src/strategies`](/d:/Proyectos/poke-api/poke-battle/src/strategies) |
+| Modo claro/oscuro | Si | Para cambiar apariencia visual | [`public/styles/themes.css`](/d:/Proyectos/poke-api/poke-battle/public/styles/themes.css), [`src/services/ThemeService.js`](/d:/Proyectos/poke-api/poke-battle/src/services/ThemeService.js) |
+| LocalStorage | Si | Para guardar tema, seleccion e historial | [`src/services/StorageService.js`](/d:/Proyectos/poke-api/poke-battle/src/services/StorageService.js) |
+| Paginacion | Si | Para no mostrar demasiados Pokemon de una vez | [`src/components/PaginationComponent.js`](/d:/Proyectos/poke-api/poke-battle/src/components/PaginationComponent.js) |
+| CSS Nesting | Si | Para ordenar mejor los estilos | [`public/styles/components.css`](/d:/Proyectos/poke-api/poke-battle/public/styles/components.css) |
 
 ---
 
-### 5.2 Tarjetas principales de batalla
+## 5. Seleccion de Pokemon
 
-Cuando el usuario seleccione los Pokémon, se mostrarán dos tarjetas principales:
+- Cumple: hay dos listas separadas para elegir Pokemon.
+- Por que: se necesitan dos combatientes distintos.
+- Donde: [`src/components/PokemonListComponent.js`](/d:/Proyectos/poke-api/poke-battle/src/components/PokemonListComponent.js).
 
-```txt
-┌────────────────────┐      VS      ┌────────────────────┐
-│ Pokémon 1          │              │ Pokémon 2          │
-│ Imagen             │              │ Imagen             │
-│ Nombre             │              │ Nombre             │
-│ Tipo               │              │ Tipo               │
-│ HP                 │              │ HP                 │
-│ Ataque             │              │ Ataque             │
-│ Defensa            │              │ Defensa            │
-│ Velocidad          │              │ Velocidad          │
-└────────────────────┘              └────────────────────┘
-```
+## 6. Tarjetas de batalla
 
----
+- Cumple: se muestran dos cards grandes con imagen, nombre, tipos y stats.
+- Por que: el usuario debe ver claramente a los combatientes.
+- Donde: [`src/components/PokemonCardComponent.js`](/d:/Proyectos/poke-api/poke-battle/src/components/PokemonCardComponent.js), [`src/components/BattleComponent.js`](/d:/Proyectos/poke-api/poke-battle/src/components/BattleComponent.js).
 
-### 5.3 Simulación de batalla
+## 7. Simulacion de batalla
 
-La batalla será una simulación basada en estadísticas, no una batalla oficial del videojuego.
+- Cumple: el puntaje sale de HP, ataque, defensa y velocidad.
+- Por que: es una regla simple de explicar y mantener.
+- Donde: [`src/strategies/BalancedStrategy.js`](/d:/Proyectos/poke-api/poke-battle/src/strategies/BalancedStrategy.js), [`src/services/BattleService.js`](/d:/Proyectos/poke-api/poke-battle/src/services/BattleService.js).
 
-Fórmula recomendada:
+## 8. Modal de resultado
 
-```txt
-Puntaje = HP + Ataque + Defensa + Velocidad
-```
+- Cumple: muestra ganador, puntajes y motivo.
+- Por que: cierra el flujo principal de la batalla.
+- Donde: [`src/components/ResultModalComponent.js`](/d:/Proyectos/poke-api/poke-battle/src/components/ResultModalComponent.js).
 
-Gana el Pokémon con mayor puntaje.
+## 9. Historial
 
-Ejemplo:
+- Cumple: cada batalla se guarda y se puede volver a leer.
+- Por que: demuestra persistencia local.
+- Donde: [`src/services/StorageService.js`](/d:/Proyectos/poke-api/poke-battle/src/services/StorageService.js), [`src/components/BattleComponent.js`](/d:/Proyectos/poke-api/poke-battle/src/components/BattleComponent.js).
 
-```txt
-Pikachu:
-HP: 35
-Ataque: 55
-Defensa: 40
-Velocidad: 90
-Total: 220
+## 10. Paginacion
 
-Charmander:
-HP: 39
-Ataque: 52
-Defensa: 43
-Velocidad: 65
-Total: 199
+- Cumple: la paginacion esta en las listas de seleccion.
+- Por que: evita mostrar demasiados Pokemon a la vez.
+- Donde: [`src/components/PaginationComponent.js`](/d:/Proyectos/poke-api/poke-battle/src/components/PaginationComponent.js), [`src/components/PokemonListComponent.js`](/d:/Proyectos/poke-api/poke-battle/src/components/PokemonListComponent.js).
 
-Ganador: Pikachu
-Motivo: mayor puntaje general
-```
+## 11. localStorage
 
----
+- Cumple: guarda tema, Pokemon elegidos, ultima batalla e historial.
+- Por que: mantiene datos entre recargas.
+- Donde: [`src/services/StorageService.js`](/d:/Proyectos/poke-api/poke-battle/src/services/StorageService.js).
 
-### 5.4 Modal de resultado
+## 12. Modo claro y oscuro
 
-Al presionar el botón **Simular batalla**, aparecerá un modal.
+- Cumple: usa variables CSS y `data-theme`.
+- Por que: cambia apariencia sin duplicar estilos.
+- Donde: [`public/styles/themes.css`](/d:/Proyectos/poke-api/poke-battle/public/styles/themes.css), [`src/services/ThemeService.js`](/d:/Proyectos/poke-api/poke-battle/src/services/ThemeService.js), [`src/components/ThemeToggleComponent.js`](/d:/Proyectos/poke-api/poke-battle/src/components/ThemeToggleComponent.js).
 
-Contenido del modal:
+## 13. CSS Nesting
 
-```txt
-Resultado de la batalla
+- Cumple: se usan selectores anidados para ordenar los estilos.
+- Por que: hace mas facil ver que pertenece a cada componente.
+- Donde: [`public/styles/components.css`](/d:/Proyectos/poke-api/poke-battle/public/styles/components.css).
 
-Ganador: Pikachu
-Puntaje Pikachu: 220
-Puntaje Charmander: 199
-Motivo: ganó por mejores estadísticas generales
+## 14. Patrones de diseno
 
-[Cerrar]
-```
+- Cumple: se usan Adapter y Strategy.
+- Por que: separan la limpieza de datos y la regla de batalla.
+- Donde: [`src/adapters/PokemonAdapter.js`](/d:/Proyectos/poke-api/poke-battle/src/adapters/PokemonAdapter.js), [`src/strategies`](/d:/Proyectos/poke-api/poke-battle/src/strategies), [`src/services/BattleService.js`](/d:/Proyectos/poke-api/poke-battle/src/services/BattleService.js).
 
-Este modal permite demostrar manipulación del DOM, eventos y diseño visual.
+## 15. Estructura y visual
+
+- Cumple: el proyecto esta separado por capas y la interfaz esta dividida en header, arena, listas e historial.
+- Por que: ordena el codigo y hace la entrega mas clara.
+- Donde: [`src/components`](/d:/Proyectos/poke-api/poke-battle/src/components), [`src/services`](/d:/Proyectos/poke-api/poke-battle/src/services), [`src/adapters`](/d:/Proyectos/poke-api/poke-battle/src/adapters), [`src/strategies`](/d:/Proyectos/poke-api/poke-battle/src/strategies), [`public/styles/layout.css`](/d:/Proyectos/poke-api/poke-battle/public/styles/layout.css), [`public/styles/components.css`](/d:/Proyectos/poke-api/poke-battle/public/styles/components.css).
 
 ---
 
-### 5.5 Historial de batallas
+## 16. Estado actual de la entrega
 
-Cada batalla simulada se guardará en `localStorage`.
+### Ya esta hecho
 
-Ejemplo de registro:
+- Consumo de PokeAPI para lista y detalle de Pokemon.
+- Seleccion de dos Pokemon desde listas paginadas.
+- Tarjetas grandes para la batalla.
+- Simulacion de batalla con puntaje general.
+- Modal con resultado.
+- Historial guardado en `localStorage`.
+- Modo claro y oscuro.
+- Adapter para limpiar la respuesta de la API.
+- Strategy para calcular el ganador.
+- CSS Nesting en los estilos de componentes.
+- Estructura por componentes, servicios, adapters, strategies y utils.
 
-```json
-{
-  "pokemon1": "pikachu",
-  "pokemon2": "charmander",
-  "winner": "pikachu",
-  "reason": "Ganó por mejores estadísticas generales",
-  "date": "2026-05-06"
-}
-```
+### Todavia se puede mejorar
 
-El historial puede mostrarse en una sección inferior con paginación.
+- La paginacion de seleccion sigue siendo basica y textual.
+- El historial se muestra simple, sin mucha jerarquia visual.
+- Los estados vacios y de carga cumplen, pero pueden verse mas claros.
+- La experiencia visual general puede subir con pequenos ajustes.
 
----
+### Proximo reto recomendado
 
-## 6. Sistema de paginación
-
-El paginado se puede implementar en dos partes:
-
-### Opción principal
-
-Usar paginación en las listas de selección de Pokémon.
-
-Ejemplo:
-
-```txt
-Pokémon 1
-[Bulbasaur] [Ivysaur] [Venusaur]
-
-Anterior | Página 1 | Siguiente
-```
-
-### Opción secundaria
-
-Usar paginación en el historial de batallas.
-
-Ejemplo:
-
-```txt
-Historial de batallas
-
-1. Pikachu vs Charmander - Ganador: Pikachu
-2. Squirtle vs Bulbasaur - Ganador: Bulbasaur
-3. Mewtwo vs Gengar - Ganador: Mewtwo
-
-Anterior | Página 1 | Siguiente
-```
-
-Recomendación: usar paginación en ambos si el tiempo alcanza. Como mínimo, aplicarla en el historial o en la lista de Pokémon.
+- Convertir la paginacion de nombres en mini cards mas visuales.
+- Mantener la misma logica de seleccion, pero cambiar solo la vista.
+- Si sobra tiempo, mejorar tambien la presentacion del historial.
 
 ---
 
-## 7. Uso de localStorage
+## 17. Hoja de ruta de trabajo
 
-La aplicación usará `localStorage` para guardar información local del usuario.
+### Fase 1: Base del proyecto
 
-Datos mínimos:
+- [x] Crear la estructura principal.
+- [x] Conectar HTML, CSS y JavaScript.
+- [x] Crear `header`.
+- [x] Crear seccion principal de batalla.
+- [x] Crear contenedores para ambos Pokemon.
+- [x] Crear boton de simular batalla.
 
-| Dato | Clave sugerida |
-|---|---|
-| Tema seleccionado | `theme` |
-| Pokémon 1 seleccionado | `selectedPokemon1` |
-| Pokémon 2 seleccionado | `selectedPokemon2` |
-| Última batalla | `lastBattle` |
-| Historial de batallas | `battleHistory` |
+### Fase 2: Consumo de API
 
-Ejemplo:
+- [x] Crear `PokemonService`.
+- [x] Consultar lista de Pokemon.
+- [x] Consultar detalle de Pokemon.
+- [x] Mostrar loader mientras carga.
+- [x] Limitar la lista a la primera generacion.
 
-```js
-localStorage.setItem("theme", "dark");
-localStorage.setItem("battleHistory", JSON.stringify(history));
-```
+### Fase 3: Modelado de datos
 
----
+- [x] Crear `PokemonAdapter`.
+- [x] Transformar la respuesta de PokeAPI.
+- [x] Dejar solo datos necesarios.
 
-## 8. Modo claro y modo oscuro
+### Fase 4: Componentes
 
-El modo claro y oscuro se implementará usando **CSS custom properties**.
+- [x] Crear `PokemonCardComponent`.
+- [x] Crear `PokemonListComponent`.
+- [x] Crear `BattleComponent`.
+- [x] Crear `PaginationComponent`.
+- [x] Crear `ResultModalComponent`.
+- [x] Crear `ThemeToggleComponent`.
 
-Ejemplo:
+### Fase 5: Batalla
 
-```css
-:root {
-  --bg-color: #ffffff;
-  --text-color: #111827;
-  --card-bg: #f3f4f6;
-  --primary-color: #2563eb;
-}
+- [x] Crear `BattleService`.
+- [x] Calcular puntaje de cada Pokemon.
+- [x] Determinar ganador.
+- [x] Mostrar resultado en modal.
 
-[data-theme="dark"] {
-  --bg-color: #111827;
-  --text-color: #f9fafb;
-  --card-bg: #1f2937;
-  --primary-color: #60a5fa;
-}
-```
+### Fase 6: Persistencia
 
-El botón de cambio de tema actualizará el atributo `data-theme` y guardará la preferencia en `localStorage`.
+- [x] Guardar tema seleccionado.
+- [x] Guardar Pokemon seleccionados.
+- [x] Guardar ultima batalla.
+- [x] Guardar historial de batallas.
 
----
+### Fase 7: Estilos
 
-## 9. CSS Nesting
+- [x] Crear variables CSS.
+- [x] Crear estilos de modo claro.
+- [x] Crear estilos de modo oscuro.
+- [x] Aplicar CSS Nesting.
+- [x] Disenar tarjetas, botones, modal y paginacion.
+- [x] Hacer diseno responsive base.
 
-El proyecto usará CSS Nesting para organizar estilos de componentes.
+### Fase 8: Pendientes de mejora visual
 
-Ejemplo:
-
-```css
-.pokemon-card {
-  background: var(--card-bg);
-  color: var(--text-color);
-  border-radius: 16px;
-  padding: 16px;
-
-  &__image {
-    width: 120px;
-    height: 120px;
-    object-fit: contain;
-  }
-
-  &__title {
-    font-size: 22px;
-    text-transform: capitalize;
-  }
-
-  &__stats {
-    display: grid;
-    gap: 8px;
-  }
-
-  &:hover {
-    transform: scale(1.02);
-  }
-}
-```
+- [ ] Convertir la paginacion de nombres en mini cards.
+- [ ] Dar mas jerarquia visual al historial.
+- [ ] Pulir estados vacios y de carga.
+- [ ] Revisar detalles finales de espaciado y consistencia.
 
 ---
 
-## 10. Patrones de diseño seleccionados
+## 18. Checklist final de entrega
 
-Se usarán dos patrones de diseño:
-
-```txt
-1. Adapter
-2. Strategy
-```
-
-No se usarán:
-
-```txt
-Factory
-Singleton
-```
-
----
-
-### 10.1 Patrón Adapter
-
-PokéAPI devuelve una respuesta grande con muchos datos. La aplicación solo necesita algunos campos.
-
-El patrón **Adapter** permite transformar la respuesta original en un objeto más limpio.
-
-Archivo sugerido:
-
-```txt
-/src/adapters/PokemonAdapter.js
-```
-
-Ejemplo:
-
-```js
-export class PokemonAdapter {
-  static adapt(data) {
-    return {
-      id: data.id,
-      name: data.name,
-      image: data.sprites.front_default,
-      types: data.types.map(item => item.type.name),
-      stats: {
-        hp: data.stats[0].base_stat,
-        attack: data.stats[1].base_stat,
-        defense: data.stats[2].base_stat,
-        speed: data.stats[5].base_stat
-      }
-    };
-  }
-}
-```
-
-Sustentación:
-
-```txt
-Se implementó Adapter para convertir la respuesta original de PokéAPI en un modelo simple y útil para la aplicación.
-```
+- [x] El proyecto usa HTML, CSS y JavaScript Vanilla.
+- [x] Consume PokeAPI.
+- [x] Tiene componente de pregunta o consulta.
+- [x] Permite seleccionar dos Pokemon.
+- [x] Simula una batalla.
+- [x] Muestra ganador.
+- [x] Usa manipulacion del DOM.
+- [x] Usa eventos de JavaScript.
+- [x] Usa programacion orientada a objetos.
+- [x] Usa patron Adapter.
+- [x] Usa patron Strategy.
+- [x] No usa Factory.
+- [x] No usa Singleton.
+- [x] Tiene modo claro.
+- [x] Tiene modo oscuro.
+- [x] Usa CSS custom properties.
+- [x] Usa CSS Nesting.
+- [x] Usa localStorage.
+- [x] Tiene sistema minimo de paginado.
+- [x] Tiene arquitectura de carpetas definida.
+- [x] Tiene diseno creativo y ordenado.
+- [x] Tiene README o documento de explicacion.
 
 ---
 
-### 10.2 Patrón Strategy
+## 19. Texto corto para sustentar el proyecto
 
-El patrón **Strategy** permite cambiar la forma de calcular el ganador sin modificar toda la lógica principal.
+El proyecto Pokemon Battle es un sitio web desarrollado con HTML, CSS y JavaScript Vanilla que consume datos desde PokeAPI para permitir la seleccion de dos Pokemon y simular una batalla basada en estadisticas. La aplicacion implementa manipulacion del DOM, componentes reutilizables, modo claro y oscuro con variables CSS, almacenamiento en localStorage y paginacion.
 
-Estrategias posibles:
-
-```txt
-BalancedStrategy: gana quien tenga mayor puntaje general.
-AttackStrategy: gana quien tenga mayor ataque.
-SpeedStrategy: gana quien tenga mayor velocidad.
-```
-
-Archivo sugerido:
-
-```txt
-/src/strategies/BalancedStrategy.js
-/src/strategies/AttackStrategy.js
-/src/strategies/SpeedStrategy.js
-```
-
-Ejemplo:
-
-```js
-export class BalancedStrategy {
-  calculate(pokemon1, pokemon2) {
-    const score1 =
-      pokemon1.stats.hp +
-      pokemon1.stats.attack +
-      pokemon1.stats.defense +
-      pokemon1.stats.speed;
-
-    const score2 =
-      pokemon2.stats.hp +
-      pokemon2.stats.attack +
-      pokemon2.stats.defense +
-      pokemon2.stats.speed;
-
-    if (score1 > score2) {
-      return {
-        winner: pokemon1.name,
-        reason: "Ganó por mejores estadísticas generales",
-        score1,
-        score2
-      };
-    }
-
-    if (score2 > score1) {
-      return {
-        winner: pokemon2.name,
-        reason: "Ganó por mejores estadísticas generales",
-        score1,
-        score2
-      };
-    }
-
-    return {
-      winner: "Empate",
-      reason: "Ambos Pokémon tienen el mismo puntaje",
-      score1,
-      score2
-    };
-  }
-}
-```
-
-Sustentación:
-
-```txt
-Se implementó Strategy para permitir diferentes formas de calcular el resultado de una batalla Pokémon sin modificar el servicio principal.
-```
+A nivel de diseno de software, se implementan los patrones Adapter y Strategy. Adapter se usa para transformar la respuesta de PokeAPI en un modelo mas simple, mientras que Strategy permite cambiar la forma de calcular el ganador de la batalla sin modificar la logica principal del sistema.
 
 ---
 
-## 11. Arquitectura de carpetas
+## 20. Conclusion
 
-Estructura recomendada:
-
-```txt
-/COMPONENTS
-│
-├── index.html
-├── README.md
-├── Instrucciones.md
-├── .gitignore
-│
-├── public
-│   └── assets
-│       ├── images
-│       └── icons
-│
-└── src
-    │
-    ├── main.js
-    ├── app.js
-    │
-    ├── styles
-    │   ├── variables.css
-    │   ├── themes.css
-    │   ├── base.css
-    │   ├── layout.css
-    │   └── components.css
-    │
-    ├── components
-    │   ├── BattleComponent.js
-    │   ├── PokemonCardComponent.js
-    │   ├── PokemonListComponent.js
-    │   ├── PaginationComponent.js
-    │   ├── ResultModalComponent.js
-    │   ├── ThemeToggleComponent.js
-    │   └── LoaderComponent.js
-    │
-    ├── services
-    │   ├── PokemonService.js
-    │   ├── BattleService.js
-    │   ├── StorageService.js
-    │   └── ThemeService.js
-    │
-    ├── adapters
-    │   └── PokemonAdapter.js
-    │
-    ├── strategies
-    │   ├── BalancedStrategy.js
-    │   ├── AttackStrategy.js
-    │   └── SpeedStrategy.js
-    │
-    └── utils
-        ├── constants.js
-        └── helpers.js
-```
+La propuesta actual cumple con los criterios del desafio porque integra consumo de API, manipulacion del DOM, CSS avanzado, programacion orientada a objetos, patrones de diseno, almacenamiento local y paginacion. Ademas, evita ser una Pokedex comun y presenta una idea mas creativa basada en comparacion y simulacion de batallas Pokemon.
 
 ---
 
-## 12. Componentes del proyecto
+## 21. Mini tarjetas para la seleccion
 
-| Componente | Responsabilidad |
-|---|---|
-| `BattleComponent` | Controlar la sección principal de batalla |
-| `PokemonCardComponent` | Mostrar la información visual de cada Pokémon |
-| `PokemonListComponent` | Mostrar listas de Pokémon seleccionables |
-| `PaginationComponent` | Controlar páginas anteriores y siguientes |
-| `ResultModalComponent` | Mostrar el resultado final de la batalla |
-| `ThemeToggleComponent` | Cambiar entre modo claro y modo oscuro |
-| `LoaderComponent` | Mostrar estado de carga mientras se consulta la API |
+### Objetivo
 
----
+- Cambiar la lista de nombres por mini tarjetas mas visuales.
+- Mantener la misma logica de seleccion que ya existe.
+- Hacer mas facil reconocer el Pokemon antes de elegirlo.
 
-## 13. Servicios del proyecto
+### Lo que ya se reutiliza
 
-| Servicio | Responsabilidad |
-|---|---|
-| `PokemonService` | Consumir PokéAPI |
-| `BattleService` | Ejecutar la lógica de batalla usando Strategy |
-| `StorageService` | Guardar y leer datos desde localStorage |
-| `ThemeService` | Aplicar y guardar el tema visual |
+- `PokemonListComponent` sigue controlando la lista y la paginacion.
+- `PokemonAdapter` ya trae `name`, `image`, `types` y `id`, asi que no hace falta pedir mas datos.
+- `selectPokemon(name)` ya trae el detalle completo, asi que no se toca esa parte.
 
----
+### Donde hacerlo
 
-## 14. Endpoints de PokéAPI sugeridos
+- [`src/components/PokemonListComponent.js`](/d:/Proyectos/poke-api/poke-battle/src/components/PokemonListComponent.js) para cambiar el render de cada item.
+- [`public/styles/components.css`](/d:/Proyectos/poke-api/poke-battle/public/styles/components.css) para agregar los estilos de la mini card.
 
-### Obtener lista de Pokémon
+### Paso a paso
 
-```txt
-https://pokeapi.co/api/v2/pokemon?limit=20&offset=0
-```
+1. Crear una estructura nueva para cada item de la lista.
+2. En lugar de `button.textContent = pokemon.name`, usar `innerHTML` con imagen, nombre e id.
+3. Seguir usando el mismo `addEventListener("click", ...)` para no cambiar la seleccion.
+4. Agregar una clase nueva, por ejemplo `pokemon-list__card`.
+5. Hacer la mini card mas compacta que la card principal.
+6. Usar la imagen que ya viene en `pokemon.image`.
+7. Mostrar solo informacion corta: `id`, `name` y tal vez el primer tipo.
+8. Mantener la lista en dos columnas en escritorio y una en movil.
 
-Uso:
+### Como reutilizar lo que ya tienes
 
-- Sirve para la lista paginada.
-- `limit` define cuántos Pokémon se muestran.
-- `offset` define desde cuál posición inicia la consulta.
+- Reutilizar el `forEach` de `renderPage()`.
+- Reutilizar el mismo `pokemonService.getPokemonByName(name)` para seleccionar.
+- Reutilizar el `Adapter` porque ya trae la imagen y los tipos listos.
+- Reutilizar la paginacion tal como esta, sin cambiar botones ni logica.
 
----
+### Que no cambiar
 
-### Obtener detalle de un Pokémon
+- No tocar `BattleComponent`.
+- No tocar `PaginationComponent`.
+- No tocar `selectPokemon`.
+- No cambiar la logica de batalla.
 
-```txt
-https://pokeapi.co/api/v2/pokemon/pikachu
-```
+### Idea base
 
-Uso:
-
-- Sirve para obtener imagen, tipos, habilidades y estadísticas.
-
----
-
-### Obtener Pokémon por tipo
-
-```txt
-https://pokeapi.co/api/v2/type/fire
-```
-
-Uso:
-
-- Sirve para filtrar Pokémon por tipo.
-- Puede usarse como mejora adicional.
-
----
-
-## 15. Diseño visual propuesto
-
-Estructura general:
-
-```txt
-┌──────────────────────────────────────────────┐
-│ Pokémon Battle              [Modo oscuro]    │
-├──────────────────────────────────────────────┤
-│                                              │
-│ ┌───────────────┐      VS     ┌──────────────┐│
-│ │ Pokémon 1     │             │ Pokémon 2    ││
-│ │ Imagen        │             │ Imagen       ││
-│ │ Stats         │             │ Stats        ││
-│ └───────────────┘             └──────────────┘│
-│                                              │
-│              [ Simular batalla ]             │
-│                                              │
-├──────────────────────────────────────────────┤
-│ Seleccionar Pokémon 1     Seleccionar Pokémon 2│
-│ [Lista paginada]          [Lista paginada]     │
-│ [Anterior] [Siguiente]    [Anterior] [Siguiente]│
-├──────────────────────────────────────────────┤
-│ Historial de batallas                         │
-│ [Registros paginados]                         │
-└──────────────────────────────────────────────┘
-```
-
----
-
-## 16. Hoja de ruta de desarrollo
-
-### Fase 1: Preparación del proyecto
-
-- [ ] Crear carpeta principal del proyecto.
-- [ ] Crear `index.html`.
-- [ ] Crear `README.md`.
-- [ ] Crear `.gitignore`.
-- [ ] Crear estructura de carpetas.
-- [ ] Conectar archivos CSS y JavaScript.
-
----
-
-### Fase 2: Maquetación HTML
-
-- [ ] Crear `header`.
-- [ ] Crear sección principal de batalla.
-- [ ] Crear contenedor para Pokémon 1.
-- [ ] Crear contenedor para Pokémon 2.
-- [ ] Crear botón de simular batalla.
-- [ ] Crear sección de selección de Pokémon.
-- [ ] Crear sección de historial.
-- [ ] Crear modal de resultado.
-
----
-
-### Fase 3: Estilos base
-
-- [ ] Crear variables CSS.
-- [ ] Crear estilos de modo claro.
-- [ ] Crear estilos de modo oscuro.
-- [ ] Aplicar CSS Nesting.
-- [ ] Diseñar tarjetas Pokémon.
-- [ ] Diseñar botones.
-- [ ] Diseñar modal.
-- [ ] Diseñar paginación.
-- [ ] Hacer diseño responsive.
-
----
-
-### Fase 4: Consumo de API
-
-- [ ] Crear `PokemonService`.
-- [ ] Consultar lista de Pokémon.
-- [ ] Consultar detalle de Pokémon.
-- [ ] Manejar errores de API.
-- [ ] Mostrar loader mientras carga.
-- [ ] Probar búsqueda por nombre.
-
----
-
-### Fase 5: Adapter
-
-- [ ] Crear `PokemonAdapter`.
-- [ ] Transformar la respuesta de PokéAPI.
-- [ ] Dejar solo datos necesarios.
-- [ ] Usar el Adapter antes de renderizar tarjetas.
-
----
-
-### Fase 6: Componentes
-
-- [ ] Crear `PokemonCardComponent`.
-- [ ] Crear `PokemonListComponent`.
-- [ ] Crear `BattleComponent`.
-- [ ] Crear `PaginationComponent`.
-- [ ] Crear `ResultModalComponent`.
-- [ ] Crear `ThemeToggleComponent`.
-
----
-
-### Fase 7: Strategy y batalla
-
-- [ ] Crear `BalancedStrategy`.
-- [ ] Crear `AttackStrategy`, si se desea agregar más opciones.
-- [ ] Crear `SpeedStrategy`, si se desea agregar más opciones.
-- [ ] Crear `BattleService`.
-- [ ] Calcular puntaje de cada Pokémon.
-- [ ] Determinar ganador.
-- [ ] Mostrar resultado en modal.
-
----
-
-### Fase 8: localStorage
-
-- [ ] Guardar tema seleccionado.
-- [ ] Guardar Pokémon seleccionados.
-- [ ] Guardar última batalla.
-- [ ] Guardar historial de batallas.
-- [ ] Cargar datos guardados al abrir la página.
-
----
-
-### Fase 9: Paginación
-
-- [ ] Crear lógica de página actual.
-- [ ] Crear botón anterior.
-- [ ] Crear botón siguiente.
-- [ ] Mostrar número de página.
-- [ ] Aplicar paginado a listas de Pokémon.
-- [ ] Aplicar paginado al historial, si se implementa.
-
----
-
-### Fase 10: Pruebas y ajustes
-
-- [ ] Probar búsqueda de Pokémon válidos.
-- [ ] Probar errores con nombres incorrectos.
-- [ ] Probar cambio de tema.
-- [ ] Probar almacenamiento local.
-- [ ] Probar paginación.
-- [ ] Revisar diseño responsive.
-- [ ] Limpiar código.
-- [ ] Revisar nombres de archivos y carpetas.
-- [ ] Preparar sustentación.
-
----
-
-## 17. Checklist final de entrega
-
-- [ ] El proyecto usa HTML, CSS y JavaScript Vanilla.
-- [ ] Consume PokéAPI.
-- [ ] Tiene componente de pregunta o consulta.
-- [ ] Permite seleccionar dos Pokémon.
-- [ ] Simula una batalla.
-- [ ] Muestra ganador.
-- [ ] Usa manipulación del DOM.
-- [ ] Usa eventos de JavaScript.
-- [ ] Usa programación orientada a objetos.
-- [ ] Usa patrón Adapter.
-- [ ] Usa patrón Strategy.
-- [ ] No usa Factory.
-- [ ] No usa Singleton.
-- [ ] Tiene modo claro.
-- [ ] Tiene modo oscuro.
-- [ ] Usa CSS custom properties.
-- [ ] Usa CSS Nesting.
-- [ ] Usa localStorage.
-- [ ] Tiene sistema mínimo de paginado.
-- [ ] Tiene arquitectura de carpetas definida.
-- [ ] Tiene diseño creativo y ordenado.
-- [ ] Tiene README o documento de explicación.
-
----
-
-## 18. Texto corto para sustentar el proyecto
-
-El proyecto **Pokémon Battle** es un sitio web desarrollado con HTML, CSS y JavaScript Vanilla que consume datos desde PokéAPI para permitir la selección de dos Pokémon y simular una batalla basada en estadísticas. La aplicación implementa manipulación del DOM, componentes reutilizables, modo claro y oscuro con variables CSS, almacenamiento en localStorage y paginación.
-
-A nivel de diseño de software, se implementan los patrones **Adapter** y **Strategy**. Adapter se usa para transformar la respuesta de PokéAPI en un modelo más simple, mientras que Strategy permite cambiar la forma de calcular el ganador de la batalla sin modificar la lógica principal del sistema.
-
----
-
-## 19. Conclusión
-
-La propuesta actual cumple con los criterios del desafío porque integra consumo de API, manipulación del DOM, CSS avanzado, programación orientada a objetos, patrones de diseño, almacenamiento local y paginación. Además, evita ser una Pokédex común y presenta una idea más creativa basada en comparación y simulación de batallas Pokémon.
+La mini card solo cambia la apariencia de la lista. La funcion real sigue siendo la misma: elegir un Pokemon desde la lista y cargar su detalle completo en la batalla.
