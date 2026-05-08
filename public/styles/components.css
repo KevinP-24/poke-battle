@@ -1,5 +1,6 @@
-/* Botones reutilizables:
-   aplican al boton de tema, boton principal, botones de lista y paginacion. */
+/* =========================
+   Botones reutilizables
+   ========================= */
 .primary-button,
 .pokemon-list__button,
 .pagination button {
@@ -14,7 +15,6 @@
   }
 }
 
-/* Boton principal usado para simular batalla y cerrar modal. */
 .primary-button {
   justify-self: center;
   background: var(--color-primary);
@@ -22,19 +22,21 @@
   border-color: var(--color-primary);
 }
 
-/* Superficies comunes:
-   cajas blancas/oscuras donde se agrupan listas, historial y modal. */
+/* =========================
+   Superficies comunes
+   ========================= */
 .pokemon-list,
 .history,
 .modal__content {
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: 25px;
   background: var(--color-surface);
   padding: 18px;
 }
 
-/* Card principal del Pokemon.
-   La clase pokemon se conserva para parecerse al ejemplo de la carpeta example. */
+/* =========================
+   Card principal Pokemon
+   ========================= */
 .pokemon-card,
 .pokemon {
   border: 1px solid var(--color-border);
@@ -48,8 +50,6 @@
   text-transform: uppercase;
   isolation: isolate;
 
-  /* Numero grande de fondo, como #025.
-     z-index -1 lo manda detras del contenido de la card. */
   & .pokemon-id-back {
     position: absolute;
     top: 18px;
@@ -61,29 +61,25 @@
     color: rgba(0, 0, 0, 0.12);
   }
 
-  /* Contenedor de la imagen del Pokemon. */
   & .pokemon-imagen {
     display: flex;
     justify-content: center;
     min-height: 150px;
   }
 
-  /* Imagen oficial del Pokemon traida desde PokeAPI. */
   & .pokemon-card__image {
-    /* width: 150px; */
-    /* height: 150px; */
     object-fit: contain;
   }
 
-  /* Informacion textual de la card. */
   & .pokemon-info {
     display: grid;
     gap: 10px;
     justify-items: center;
   }
 
-  /* Agrupa id pequeno y nombre. */
-  & .nombre-contenedor {
+  & .nombre-contenedor,
+  & .pokemon-tipos,
+  & .pokemon-stats {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -91,7 +87,6 @@
     flex-wrap: wrap;
   }
 
-  /* Chips pequenos para id, altura y peso. */
   & .pokemon-id,
   & .stat {
     background: var(--color-bg);
@@ -101,22 +96,11 @@
     font-weight: 600;
   }
 
-  /* Nombre del Pokemon. */
   & .pokemon-nombre {
     font-size: 24px;
     text-transform: capitalize;
   }
 
-  /* Contenedores de tipos y datos fisicos. */
-  & .pokemon-tipos,
-  & .pokemon-stats {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  /* Chip de tipo: fire, water, electric, etc. */
   & .tipo {
     border-radius: 999px;
     color: #ffffff;
@@ -125,7 +109,6 @@
     padding: 4px 8px;
   }
 
-  /* Seccion donde van las barras de estadisticas. */
   & .pokemon-battle-stats {
     display: grid;
     gap: 10px;
@@ -133,51 +116,45 @@
     margin-top: 4px;
   }
 
-  /* Cada estadistica tiene texto arriba y barra abajo. */
   & .stat-bar {
     display: grid;
     gap: 5px;
     text-align: left;
     text-transform: none;
-  }
 
-  /* Fila superior de una estadistica: nombre a la izquierda, valor a la derecha. */
-  & .stat-bar__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    font-size: 13px;
+    & .stat-bar__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 13px;
 
-    & span {
-      color: var(--color-muted);
-      font-weight: 700;
+      & span {
+        color: var(--color-muted);
+        font-weight: 700;
+      }
+
+      & strong {
+        color: var(--color-text);
+        font-size: 14px;
+      }
     }
 
-    & strong {
-      color: var(--color-text);
-      font-size: 14px;
+    & .stat-bar__track {
+      height: 10px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+
+      & .stat-bar__fill {
+        height: 100%;
+        border-radius: inherit;
+        background: var(--pokemon-color);
+      }
     }
   }
 
-  /* Fondo de la barra. */
-  & .stat-bar__track {
-    height: 10px;
-    overflow: hidden;
-    border-radius: 999px;
-    background: var(--color-bg);
-    border: 1px solid var(--color-border);
-  }
-
-  /* Parte llena de la barra.
-     El color viene de --pokemon-color, variable puesta desde JavaScript. */
-  & .stat-bar__fill {
-    height: 100%;
-    border-radius: inherit;
-    background: var(--pokemon-color);
-  }
-
-  /* Estado inicial de la arena antes de seleccionar Pokemon. */
   & .pokemon-card__empty {
     min-height: 280px;
     display: grid;
@@ -193,106 +170,58 @@
   }
 }
 
-/* Clases de tipo.
-   El HTML de la card agrega el tipo como clase, por ejemplo class="water tipo". */
-.normal {
-  background: var(--type-normal);
-  color: #18212f;
-}
-
-.fire {
-  background: var(--type-fire);
-}
-
-.water {
-  background: var(--type-water);
-}
-
-.grass {
-  background: var(--type-grass);
-  color: #18212f;
-}
-
-.electric {
-  background: var(--type-electric);
-  color: #18212f;
-}
-
-.ice {
-  background: var(--type-ice);
-  color: #18212f;
-}
-
-.fighting {
-  background: var(--type-fighting);
-}
-
-.poison {
-  background: var(--type-poison);
-}
-
-.ground {
-  background: var(--type-ground);
-  color: #18212f;
-}
-
-.flying {
-  background: var(--type-flying);
-}
-
-.psychic {
-  background: var(--type-psychic);
-}
-
-.bug {
-  background: var(--type-bug);
-  color: #18212f;
-}
-
-.rock {
-  background: var(--type-rock);
-}
-
-.ghost {
-  background: var(--type-ghost);
-}
-
-.dark {
-  background: var(--type-dark);
-}
-
-.dragon {
-  background: var(--type-dragon);
-}
-
-.steel {
-  background: var(--type-steel);
-  color: #18212f;
-}
-
+/* =========================
+   Colores por tipo
+   ========================= */
+.normal,
+.grass,
+.electric,
+.ice,
+.ground,
+.bug,
+.steel,
 .fairy {
-  background: var(--type-fairy);
   color: #18212f;
 }
 
-/* Caja de cada selector de Pokemon. */
+.normal { background: var(--type-normal); }
+.fire { background: var(--type-fire); }
+.water { background: var(--type-water); }
+.grass { background: var(--type-grass); }
+.electric { background: var(--type-electric); }
+.ice { background: var(--type-ice); }
+.fighting { background: var(--type-fighting); }
+.poison { background: var(--type-poison); }
+.ground { background: var(--type-ground); }
+.flying { background: var(--type-flying); }
+.psychic { background: var(--type-psychic); }
+.bug { background: var(--type-bug); }
+.rock { background: var(--type-rock); }
+.ghost { background: var(--type-ghost); }
+.dark { background: var(--type-dark); }
+.dragon { background: var(--type-dragon); }
+.steel { background: var(--type-steel); }
+.fairy { background: var(--type-fairy); }
+
+/* =========================
+   Lista de Pokemon
+   ========================= */
 .pokemon-list {
   display: grid;
   gap: 14px;
 
-  /* Botones de Pokemon organizados en dos columnas. */
   & .pokemon-list__items {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 8px;
   }
 
-  /* Los nombres llegan en minuscula desde la API; capitalize mejora lectura. */
-  & .pokemon-list__button {
+  & .pokemon-list__button,
+  & .pokemon-list__type,
+  & .pokemon-list__name {
     text-transform: capitalize;
   }
 
-  /* Mini tarjeta usada para seleccionar Pokemon. */
   & .pokemon-list__card {
     position: relative;
     display: grid;
@@ -306,12 +235,10 @@
     text-align: left;
   }
 
-  /* Mitad colorida de la mini tarjeta. */
   & .pokemon-list__side--color {
     background: var(--pokemon-list-color);
   }
 
-  /* Mitad blanca de la mini tarjeta. */
   & .pokemon-list__side--white {
     display: flex;
     flex-direction: column;
@@ -324,7 +251,6 @@
     text-align: right;
   }
 
-  /* Imagen pequena de la mini tarjeta. */
   & .pokemon-list__image {
     position: absolute;
     left: 38%;
@@ -338,7 +264,6 @@
     filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.18));
   }
 
-  /* Numero pequeno del Pokemon. */
   & .pokemon-list__id {
     position: absolute;
     top: 10px;
@@ -348,24 +273,19 @@
     color: var(--color-muted);
   }
 
-  /* Tipo o etiqueta pequena en la mitad de color. */
   & .pokemon-list__type {
     font-size: 12px;
     font-weight: 700;
-    text-transform: capitalize;
     opacity: 0.9;
   }
 
-  /* Nombre del Pokemon en la mini tarjeta. */
   & .pokemon-list__name {
     font-size: 14px;
-    text-transform: capitalize;
     text-align: right;
     color: var(--color-text);
     margin-top: 2px;
   }
 
-  /* Grupo de tipos de la mini tarjeta. */
   & .pokemon-list__types {
     display: flex;
     justify-content: flex-end;
@@ -383,7 +303,9 @@
   }
 }
 
-/* Contenedor de paginacion. */
+/* =========================
+   Paginacion
+   ========================= */
 .pagination {
   display: flex;
   align-items: center;
@@ -391,8 +313,9 @@
   gap: 10px;
 }
 
-/* Imagen VS:
-   position absolute la pone encima de la arena sin mover las cards. */
+/* =========================
+   VS
+   ========================= */
 .versus {
   position: absolute;
   left: 50%;
@@ -405,21 +328,64 @@
   pointer-events: none;
 }
 
-/* En movil reducimos el VS para que no tape demasiado. */
-@media (max-width: 760px) {
-  .versus {
-    width: 260px;
-    opacity: 0.72;
+/* =========================
+   Historial
+   ========================= */
+.history {
+  display: grid;
+  gap: 14px;
+
+  & h2 {
+    margin-bottom: 4px;
+  }
+
+  & .history__item {
+    display: grid;
+    gap: 10px;
+    border: 1px solid var(--color-border);
+    border-radius: 14px;
+    padding: 14px;
+    background: var(--color-bg);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+  }
+
+  & .history__battle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    text-transform: capitalize;
+    font-weight: 700;
+
+    & strong {
+      border-radius: 999px;
+      padding: 4px 10px;
+      background: var(--color-primary);
+      color: #ffffff;
+      font-size: 12px;
+    }
+  }
+
+  & .history__winner {
+    text-transform: capitalize;
+    color: var(--color-muted);
+
+    & strong {
+      color: var(--color-primary);
+    }
+  }
+
+  & .history__reason {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--color-muted);
   }
 }
 
-/* Historial de batallas guardadas. */
-.history {
-  display: grid;
-  gap: 10px;
-}
-
-/* Fondo oscuro del modal que cubre toda la pagina. */
+/* =========================
+   Modal
+   ========================= */
 .modal {
   position: fixed;
   inset: 0;
@@ -430,7 +396,6 @@
   background: rgba(0, 0, 0, 0.55);
 }
 
-/* Caja principal del modal. */
 .modal__content {
   width: min(900px, 100%);
   display: grid;
@@ -439,51 +404,49 @@
   z-index: 21;
 }
 
-/* Cuerpo del modal:
-   card del ganador a un lado y texto del resultado al otro. */
 .modal__body {
-  /* display: grid; */
+  display: grid;
   grid-template-columns: minmax(300px, 360px) 1fr;
   align-items: center;
   gap: 28px;
 }
 
-/* Ajustes de la card cuando aparece dentro del modal. */
-.modal__winner-card .pokemon-card {
-  min-height: 380px;
-  padding: 18px;
+.modal__winner-card {
+  & .pokemon-card {
+    min-height: 380px;
+    padding: 18px;
 
-  & .pokemon-id-back {
-    font-size: 68px;
-  }
+    & .pokemon-id-back {
+      font-size: 68px;
+    }
 
-  & .pokemon-imagen {
-    min-height: 150px;
-  }
+    & .pokemon-imagen {
+      min-height: 150px;
+    }
 
-  & .pokemon-card__image {
-    width: 145px;
-    height: 145px;
-  }
+    & .pokemon-card__image {
+      width: 145px;
+      height: 145px;
+    }
 
-  & .pokemon-nombre {
-    font-size: 24px;
-  }
+    & .pokemon-nombre {
+      font-size: 24px;
+    }
 
-  & .pokemon-battle-stats {
-    gap: 8px;
-  }
+    & .pokemon-battle-stats {
+      gap: 8px;
+    }
 
-  & .stat-bar__header {
-    font-size: 13px;
-  }
+    & .stat-bar__header {
+      font-size: 13px;
+    }
 
-  & .stat-bar__track {
-    height: 9px;
+    & .stat-bar__track {
+      height: 9px;
+    }
   }
 }
 
-/* Bloque de texto del resultado. */
 .modal__result-info {
   display: grid;
   gap: 12px;
@@ -496,7 +459,6 @@
   }
 }
 
-/* Etiqueta pequena encima del nombre del ganador. */
 .modal__label {
   width: fit-content;
   border-radius: 999px;
@@ -509,7 +471,6 @@
   text-transform: uppercase;
 }
 
-/* Lista de puntajes dentro del modal. */
 .modal__scores {
   display: grid;
   gap: 8px;
@@ -535,7 +496,6 @@
   }
 }
 
-/* Motivo del resultado. */
 .modal__reason {
   border-left: 4px solid var(--color-primary);
   color: var(--color-muted);
@@ -544,14 +504,23 @@
   padding-left: 12px;
 }
 
-/* En movil el modal pasa a una columna. */
+/* =========================
+   Responsive
+   ========================= */
 @media (max-width: 760px) {
+  .versus {
+    width: 260px;
+    opacity: 0.72;
+  }
+
   .modal__body {
     grid-template-columns: 1fr;
   }
 }
 
-/* Texto que se muestra mientras carga la lista desde la API. */
+/* =========================
+   Loader
+   ========================= */
 .loader {
   color: var(--color-muted);
 }

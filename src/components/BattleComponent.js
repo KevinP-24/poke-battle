@@ -214,8 +214,21 @@ export class BattleComponent {
     }
 
     history.forEach((battle) => {
-      const item = document.createElement("p")
-      item.textContent = `${battle.pokemon1} vs ${battle.pokemon2} - Ganador: ${battle.winner}`
+      const item = document.createElement("article")
+      item.className = "history__item"
+
+      item.innerHTML = `
+        <div class = "history__battle">
+          <span>${battle.pokemon1}</span>
+          <strong>VS</strong>
+          <span>${battle.pokemon2}</span>
+        </div>
+        <div class="history__winner">
+          Ganador: <strong>${battle.winner}</strong>
+        </div>
+
+        <p class = "history__reason">${battle.reason}</p>
+      `
       this.historyContainer.append(item)
     })
   }
