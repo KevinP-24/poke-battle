@@ -1,6 +1,7 @@
 import { PokemonCardComponent } from "./PokemonCardComponent.js"
 import { PokemonListComponent } from "./PokemonListComponent.js"
 import { ResultModalComponent } from "./ResultModalComponent.js"
+import { PaginationComponent } from "./PaginationComponent.js"
 import { BattleService } from "../services/BattleService.js"
 import { PokemonService } from "../services/PokemonService.js"
 import { StorageService } from "../services/StorageService.js"
@@ -21,6 +22,10 @@ export class BattleComponent {
     // Aqui guardamos los dos Pokemon seleccionados.
     this.pokemonOne = null
     this.pokemonTwo = null
+    // Constructor para la paginacion del historial para que quede mas estetico
+    this.historyPage = 1
+    this.historyLimit = 5
+
   }
 
   render() {
@@ -202,23 +207,27 @@ export class BattleComponent {
   }
 
   renderHistory() {
-    // Leemos las batallas guardadas y las pintamos en pantalla.
     const history = this.storageService.getBattles()
+    const maxPage = Math.ceil(history.length / this.historyLimit) || 1
+    if (this.historyPage > maxPage) {
+      this.historyPage = maxPage
+    }
     this.historyContainer.innerHTML = "<h2>Historial de batallas</h2>"
-
+    // Validamos contenido del historial para mostrar mensaje de ser necesario
     if (history.length === 0) {
       const empty = document.createElement("p")
       empty.textContent = "No hay batallas guardadas."
       this.historyContainer.append(empty)
       return
     }
-
-    history.forEach((battle) => {
+    const start = (this.historyPage - 1) * this.historyLimit
+    const end = start + this.historyLimit
+    const pageHistory = history.slice(start, end)
+    pageHistory.forEach((battle) => {
       const item = document.createElement("article")
       item.className = "history__item"
-
       item.innerHTML = `
-        <div class = "history__battle">
+        <div class="history__battle">
           <span>${battle.pokemon1}</span>
           <strong>VS</strong>
           <span>${battle.pokemon2}</span>
@@ -226,10 +235,26 @@ export class BattleComponent {
         <div class="history__winner">
           Ganador: <strong>${battle.winner}</strong>
         </div>
-
-        <p class = "history__reason">${battle.reason}</p>
+        <p class="history__reason">${battle.reason}</p>
       `
       this.historyContainer.append(item)
     })
+    const pagination = new PaginationComponent({
+      getPage: () => this.historyPage,
+      getMaxPage: () => maxPage,
+      onPrev: () => {
+        if (this.historyPage > 1) {
+          this.historyPage--
+          this.renderHistory()
+        }
+      },
+      onNext: () => {
+        if (this.historyPage < maxPage) {
+          this.historyPage++
+          this.renderHistory()
+        }
+      },
+    })
+    this.historyContainer.append(pagination.render())
   }
 }
