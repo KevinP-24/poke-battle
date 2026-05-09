@@ -421,6 +421,18 @@
   gap: 28px;
 }
 
+.modal__body--message {
+  grid-template-columns: 1fr;
+  justify-items: center;
+  text-align: center;
+}
+
+.modal__body--message p {
+  max-width: 26rem;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
 .modal__winner-card {
   & .pokemon-card {
     min-height: 380px;

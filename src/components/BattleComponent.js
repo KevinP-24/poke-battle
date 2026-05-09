@@ -6,7 +6,6 @@ import { BattleService } from "../services/BattleService.js"
 import { PokemonService } from "../services/PokemonService.js"
 import { StorageService } from "../services/StorageService.js"
 import { BalancedStrategy } from "../strategies/BalancedStrategy.js"
-import { SpeedStrategy } from "../strategies/SpeedStrategy.js"
 
 export class BattleComponent {
   constructor() {
@@ -22,10 +21,11 @@ export class BattleComponent {
     // Aqui guardamos los dos Pokemon seleccionados.
     this.pokemonOne = null
     this.pokemonTwo = null
+    this.listOne = null
+    this.listTwo = null
     // Constructor para la paginacion del historial para que quede mas estetico
     this.historyPage = 1
     this.historyLimit = 5
-
   }
 
   render() {
@@ -60,8 +60,6 @@ export class BattleComponent {
     simulateButton.textContent = "Simular batalla"
     simulateButton.addEventListener("click", this.simulateBattle.bind(this))
 
-
-
     // Parte inferior del aplicativo
     // Seccion donde estan las dos listas de seleccion.
     const listas = document.createElement("section")
@@ -79,6 +77,8 @@ export class BattleComponent {
       onSelect: this.selectPokemonTwo.bind(this),
     })
 
+    this.listOne = listOne
+    this.listTwo = listTwo
     listas.append(listOne.render(), listTwo.render())
 
     // Historial basico de batallas guardadas en localStorage.
@@ -87,55 +87,77 @@ export class BattleComponent {
     this.historyContainer.innerHTML = "<h2>Historial de batallas</h2><p>No hay batallas guardadas.</p>"
 
     this.element.append(escenario, simulateButton, listas, this.historyContainer)
-    
-    this.renderHistory();
-    
-    // Cargamos una sola vez la primera generacion y la compartimos en las dos listas.
-    this.pokemonService.getPokemonList(151, 0).then((list) => {
-      listOne.setPokemonList(list)
-      listTwo.setPokemonList(list)
-      listOne.loadPage()
-      listTwo.loadPage()
-    })
-    // Alternativa persistendolos en el local storage
-    // this.pokemonService.getPokemonList(151, 0).then((list) => {
-    //   listOne.setPokemonList(list)
-    //   listTwo.setPokemonList(list)
-    //   listOne.loadPage()
-    //   listTwo.loadPage()
 
-    //   const selectedPokemon1 = this.storageService.get("selectedPokemon1")
-    //   const selectedPokemon2 = this.storageService.get("selectedPokemon2")
-    //   if (selectedPokemon1) {
-    //     this.pokemonService.getPokemonByName(selectedPokemon1).then((pokemon) => {
-    //       this.selectPokemonOne(pokemon)
-    //     })
-    //   }
-
-    //   if (selectedPokemon2) {
-    //     this.pokemonService.getPokemonByName(selectedPokemon2).then((pokemon) => {
-    //       this.selectPokemonTwo(pokemon)
-    //     })
-    //   }
-    // })
+    this.renderHistory()
+    this.loadPokemonData()
 
     return this.element
   }
-  // !!!! Pilas no se esta guardando la secion del pokemon en el local storage
+
+  loadPokemonData() {
+    if (!this.listOne || !this.listTwo) {
+      return
+    }
+
+    // Cargamos una sola vez la primera generacion y la compartimos en las dos listas.
+    this.pokemonService.getPokemonList(151, 0)
+      .then((list) => {
+        this.listOne.setPokemonList(list)
+        this.listTwo.setPokemonList(list)
+        this.listOne.loadPage()
+        this.listTwo.loadPage()
+        this.restoreSelectedPokemon()
+      })
+      .catch(() => {
+        const message = navigator.onLine
+          ? "No se pudieron cargar los Pokemon. Intenta de nuevo."
+          : "Sin conexion. Conecta internet para cargar la lista."
+
+        this.listOne.showMessage(message)
+        this.listTwo.showMessage(message)
+        this.restoreSelectedPokemon()
+      })
+  }
+
+  restoreSelectedPokemon() {
+    const selectedPokemon1 = this.storageService.get("selectedPokemon1")
+    const selectedPokemon2 = this.storageService.get("selectedPokemon2")
+
+    const restorePokemon = (savedPokemon, onRestore) => {
+      if (!savedPokemon) {
+        return
+      }
+
+      if (typeof savedPokemon === "object" && savedPokemon.name) {
+        onRestore(savedPokemon)
+        return
+      }
+
+      if (!navigator.onLine) {
+        return
+      }
+
+      this.pokemonService.getPokemonByName(savedPokemon).then(onRestore)
+    }
+
+    restorePokemon(selectedPokemon1, this.selectPokemonOne.bind(this))
+    restorePokemon(selectedPokemon2, this.selectPokemonTwo.bind(this))
+  }
+
   selectPokemonOne(pokemon) {
     // Guardamos el Pokemon uno en memoria y en localStorage.
     this.pokemonOne = pokemon
-    this.storageService.save("selectedPokemon1", pokemon.name)
+    this.storageService.save("selectedPokemon1", pokemon)
 
     // Reemplazamos la card vacia por la card del Pokemon seleccionado.
     this.cardOneContainer.innerHTML = ""
     this.cardOneContainer.append(new PokemonCardComponent(pokemon).render())
   }
-  // !!!! Pilas no se esta guardando la secion del pokemon en el local storage
+
   selectPokemonTwo(pokemon) {
     // Guardamos el Pokemon dos en memoria y en localStorage.
     this.pokemonTwo = pokemon
-    this.storageService.save("selectedPokemon2", pokemon.name)
+    this.storageService.save("selectedPokemon2", pokemon)
 
     // Reemplazamos la card vacia por la card del Pokemon seleccionado.
     this.cardTwoContainer.innerHTML = ""

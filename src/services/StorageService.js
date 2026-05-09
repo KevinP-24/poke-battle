@@ -17,7 +17,11 @@ export class StorageService {
       return defaultValue
     }
 
-    return JSON.parse(savedValue)
+    try {
+      return JSON.parse(savedValue)
+    } catch (error) {
+      return defaultValue
+    }
   }
 
   addBattle(battle) {

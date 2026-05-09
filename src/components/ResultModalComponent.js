@@ -50,6 +50,7 @@ export class ResultModalComponent {
       `
       body.append(resultInfo)
     } else {
+      body.classList.add("modal__body--message")
       body.textContent = this.message
     }
 
