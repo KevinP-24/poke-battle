@@ -1,6 +1,6 @@
 export class PokemonCardComponent {
   constructor(pokemon = null) {
-    // Si pokemon llega null, mostramos la card vacia.
+    // Si no llega un Pokemon, mostramos la card vacia.
     this.pokemon = pokemon
     this.element = document.createElement("article")
   }
@@ -8,46 +8,45 @@ export class PokemonCardComponent {
   render() {
     this.element.className = "pokemon-card pokemon"
 
-    // Estado inicial antes de seleccionar un Pokemon.
     if (!this.pokemon) {
-      this.element.innerHTML = `
-        <div class="pokemon-card__empty">Selecciona un Pokemon</div>
-      `
+      this.renderEmptyState()
       return this.element
     }
 
-    const stats = this.pokemon.stats
-    const firstType = this.pokemon.types[0]
-    let types = ""
+    this.renderPokemonCard()
 
-    for (let i = 0; i < this.pokemon.types.length; i += 1) {
-      const type = this.pokemon.types[i]
-      types += `<p class="${type} tipo">${type}</p>`
-    }
+    return this.element
+  }
 
-    const pokeId = this.pokemon.id.toString().padStart(3, "0")
+  renderEmptyState() {
+    this.element.innerHTML = `
+      <div class="pokemon-card__empty">Selecciona un Pokemon</div>
+    `
+  }
 
-    // El primer tipo define el color de fondo y de las barras de estadisticas.
-    this.element.style.background = `linear-gradient(to bottom, var(--type-${firstType}) 45%, var(--color-surface) 45%)`
-    this.element.style.setProperty("--pokemon-color", `var(--type-${firstType})`)
+  renderPokemonCard() {
+    const pokemon = this.pokemon
+    const stats = pokemon.stats
+    const firstType = pokemon.types[0]
+    const pokeId = pokemon.id.toString().padStart(3, "0")
+    const types = this.renderTypes()
 
-    // Creamos la estructura visual de la card con datos ya limpios del Adapter.
     this.element.innerHTML = `
       <p class="pokemon-id-back">#${pokeId}</p>
       <div class="pokemon-imagen">
-        <img class="pokemon-card__image" src="${this.pokemon.image}" alt="${this.pokemon.name}">
+        <img class="pokemon-card__image" src="${pokemon.image}" alt="${pokemon.name}">
       </div>
       <div class="pokemon-info">
         <div class="nombre-contenedor">
           <p class="pokemon-id">#${pokeId}</p>
-          <h2 class="pokemon-nombre">${this.pokemon.name}</h2>
+          <h2 class="pokemon-nombre">${pokemon.name}</h2>
         </div>
         <div class="pokemon-tipos">
           ${types}
         </div>
         <div class="pokemon-stats">
-        <p class="stat">${this.pokemon.height}m</p>
-        <p class="stat">${this.pokemon.weight}kg</p>
+        <p class="stat">${pokemon.height}m</p>
+        <p class="stat">${pokemon.weight}kg</p>
         </div>
         <div class="pokemon-battle-stats">
           ${this.createStatBar("HP", stats.hp)}
@@ -58,7 +57,20 @@ export class PokemonCardComponent {
       </div>
     `
 
-    return this.element
+    // El primer tipo define el color de fondo y de las barras de estadisticas.
+    this.element.style.background = `linear-gradient(to bottom, var(--type-${firstType}) 45%, var(--color-surface) 45%)`
+    this.element.style.setProperty("--pokemon-color", `var(--type-${firstType})`)
+  }
+
+  renderTypes() {
+    let types = ""
+
+    for (let i = 0; i < this.pokemon.types.length; i += 1) {
+      const type = this.pokemon.types[i]
+      types += `<p class="${type} tipo">${type}</p>`
+    }
+
+    return types
   }
 
   createStatBar(label, value) {

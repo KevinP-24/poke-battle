@@ -1,6 +1,6 @@
 export class PokemonAdapter {
   static adapt(data) {
-    // Convertimos la respuesta grande de PokeAPI en un objeto pequeno.
+    // Convertimos la respuesta grande de PokeAPI en un objeto sencillo.
     const types = []
 
     for (let i = 0; i < data.types.length; i += 1) {

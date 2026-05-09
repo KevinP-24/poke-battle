@@ -4,36 +4,39 @@ export class PaginationComponent {
     this.getMaxPage = getMaxPage
     this.onPrev = onPrev
     this.onNext = onNext
+
     this.element = document.createElement("div")
+    this.pageLabel = null
+    this.prevButton = null
+    this.nextButton = null
   }
 
   render() {
     this.element.className = "pagination"
 
-    // Creamos los botones con innerHTML porque es una estructura pequena.
-    this.element.innerHTML = `
-      <button class="pagination__prev">Anterior</button>
-      <span class="pagination__page">Pagina ${this.getPage()}</span>
-      <button class="pagination__next">Siguiente</button>
-    `
+    this.prevButton = document.createElement("button")
+    this.prevButton.className = "pagination__prev"
+    this.prevButton.textContent = "Anterior"
+    this.prevButton.addEventListener("click", this.onPrev)
 
-    // Cada boton ejecuta la funcion que recibio en el constructor.
-    this.element.querySelector(".pagination__prev").addEventListener("click", this.onPrev)
-    this.element.querySelector(".pagination__next").addEventListener("click", this.onNext)
+    this.pageLabel = document.createElement("span")
+    this.pageLabel.className = "pagination__page"
 
+    this.nextButton = document.createElement("button")
+    this.nextButton.className = "pagination__next"
+    this.nextButton.textContent = "Siguiente"
+    this.nextButton.addEventListener("click", this.onNext)
+
+    this.element.append(this.prevButton, this.pageLabel, this.nextButton)
     this.update(this.getPage(), this.getMaxPage())
 
     return this.element
   }
 
   update(page, maxPage) {
-    // Solo cambiamos el texto de la pagina actual.
-    const pageLabel = this.element.querySelector(".pagination__page")
-    const prevButton = this.element.querySelector(".pagination__prev")
-    const nextButton = this.element.querySelector(".pagination__next")
-
-    pageLabel.textContent = `Pagina ${page}`
-    prevButton.disabled = page <= 1
-    nextButton.disabled = page >= maxPage
+    // Cambiamos el texto y el estado de los botones.
+    this.pageLabel.textContent = `Pagina ${page}`
+    this.prevButton.disabled = page <= 1
+    this.nextButton.disabled = page >= maxPage
   }
 }
