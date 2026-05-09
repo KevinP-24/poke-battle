@@ -9,6 +9,8 @@ export class LoaderComponent {
   render() {
     this.element.className = "loader"
     this.element.innerHTML = ""
+    this.element.style.gridColumn = "1 / -1"
+    this.element.style.width = "100%"
 
     if (this.showSpinner) {
       const spinner = document.createElement("span")
