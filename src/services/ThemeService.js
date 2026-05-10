@@ -4,13 +4,13 @@ export class ThemeService {
   }
 
   loadTheme() {
-    // Leemos el tema guardado y lo ponemos como atributo en <html>.
+    // Leemos el tema guardado y lo ponemos en <html>.
     const theme = this.storageService.get("theme", "light")
     document.documentElement.dataset.theme = theme
   }
 
   toggleTheme() {
-    // Si esta en oscuro pasa a claro, si no pasa a oscuro.
+    // Cambiamos entre claro y oscuro.
     const currentTheme = document.documentElement.dataset.theme
     let newTheme = "dark"
 

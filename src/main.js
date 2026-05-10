@@ -1,10 +1,10 @@
 import { App } from "./app.js"
 
-// Buscamos el contenedor principal que esta en public/index.html.
+// Buscamos el contenedor principal que esta en el HTML.
 const contenedorPrincipal = document.querySelector("#root")
 
-// Creamos la aplicacion y le pasamos ese contenedor para pintar todo adentro.
+// Creamos la app y le pasamos ese contenedor.
 const app = new App(contenedorPrincipal)
 
-// Llamamos render para construir la interfaz con JavaScript.
+// Pintamos la interfaz.
 app.render()

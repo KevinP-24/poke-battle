@@ -1,6 +1,6 @@
 import { PaginationComponent } from "./PaginationComponent.js"
 import { LoaderComponent } from "./LoaderComponent.js"
-import { FIRST_GEN_POKEMON_COUNT } from "../utils/constants.js"
+import { CANTIDAD_MAXIMA } from "../utils/constants.js"
 
 export class PokemonListComponent {
   constructor({ title, pokemonService, onSelect }) {
@@ -9,38 +9,37 @@ export class PokemonListComponent {
     this.pokemonService = pokemonService
     this.onSelect = onSelect
 
-    // Estado sencillo para controlar la paginacion.
+    // Estado de paginacion.
     this.page = 1
     this.limit = 8
-    this.maxPage = Math.ceil(FIRST_GEN_POKEMON_COUNT / this.limit)
+    this.maxPage = Math.ceil(CANTIDAD_MAXIMA / this.limit)
     this.pokemonList = []
+    this.loadToken = 0
 
-    // Elementos base que se van a reutilizar.
+    // Elementos base.
     this.element = document.createElement("section")
     this.listContainer = document.createElement("div")
+    this.pagination = null
   }
 
   render() {
-    // Cada vez que renderizamos, limpiamos el componente.
+    // Limpiamos y armamos la estructura.
     this.element.className = "pokemon-list"
     this.element.innerHTML = ""
 
-    const title = document.createElement("h2")
-    title.textContent = this.title
+    const titleElement = document.createElement("h2")
+    titleElement.textContent = this.title
 
-    // Aqui se van a insertar los botones de cada Pokemon.
     this.listContainer.className = "pokemon-list__items"
 
-    // La paginacion recibe funciones para cambiar de pagina.
     this.pagination = new PaginationComponent({
       getPage: () => this.page,
       getMaxPage: () => this.maxPage,
-      onPrev: this.prevPage.bind(this),
-      onNext: this.nextPage.bind(this),
+      onPrev: () => this.prevPage(),
+      onNext: () => this.nextPage(),
     })
 
-    this.element.append(title, this.listContainer, this.pagination.render())
-
+    this.element.append(titleElement, this.listContainer, this.pagination.render())
     return this.element
   }
 
@@ -51,80 +50,124 @@ export class PokemonListComponent {
 
   loadPage() {
     if (!this.pokemonList.length) {
-      const loader = new LoaderComponent("Cargando Pokemon...")
-      this.listContainer.innerHTML = ""
-      this.listContainer.append(loader.render())
+      this.showLoading("Cargando Pokemon...")
       return
     }
 
     this.renderPage()
   }
 
-  renderPage() {
+  showLoading(message, showSpinner = true) {
+    this.listContainer.innerHTML = ""
+    this.listContainer.append(new LoaderComponent(message, showSpinner).render())
+  }
+
+  showMessage(message) {
+    this.page = 1
+    this.showLoading(message, false)
+
+    if (this.pagination) {
+      this.pagination.update(this.page, 1)
+    }
+  }
+
+  async renderPage() {
+    this.loadToken += 1
+    const currentToken = this.loadToken
+
     const start = (this.page - 1) * this.limit
     const end = start + this.limit
     const pagePokemon = this.pokemonList.slice(start, end)
 
-    this.listContainer.innerHTML = ""
-    this.listContainer.append(new LoaderComponent("Cargando Pokemon...").render())
+    this.showLoading("Cargando Pokemon...")
 
-    Promise.all(pagePokemon.map((pokemon) => this.pokemonService.getPokemonByName(pokemon.name))).then((detailedPokemonList) => {
-      this.listContainer.innerHTML = ""
+    try {
+      const fragment = document.createDocumentFragment()
 
-      // Por cada Pokemon creamos una mini tarjeta clickeable.
-      detailedPokemonList.forEach((pokemon) => {
-        const button = document.createElement("button")
-        button.type = "button"
-        const pokemonId = pokemon.id.toString().padStart(3, "0")
-        const pokemonType = pokemon.types[0] || "normal"
-        let types = ""
-
-        for (let i = 0; i < pokemon.types.length; i += 1) {
-          const type = pokemon.types[i]
-          types += `<span class="${type} pokemon-list__type pokemon-list__type--white">${type}</span>`
+      for (let i = 0; i < pagePokemon.length; i += 1) {
+        if (currentToken !== this.loadToken) {
+          return
         }
 
-        button.className = "pokemon-list__button pokemon-list__card"
-        button.style.setProperty("--pokemon-list-color", `var(--type-${pokemonType})`)
-        button.innerHTML = `
-          <div class="pokemon-list__side pokemon-list__side--color">
-          </div>
-          <div class="pokemon-list__side pokemon-list__side--white">
-            <span class="pokemon-list__id">#${pokemonId}</span>
-            <strong class="pokemon-list__name">${pokemon.name}</strong>
-            <div class="pokemon-list__types">
-              ${types}
-            </div>
-          </div>
-          <img class="pokemon-list__image" src="${pokemon.image}" alt="${pokemon.name}">
-        `
+        const pokemonListItem = pagePokemon[i]
+        const pokemon = await this.pokemonService.getPokemonByName(pokemonListItem.name)
 
-        // Al hacer click consultamos el detalle completo de ese Pokemon.
-        button.addEventListener("click", () => this.selectPokemon(pokemon.name))
-        this.listContainer.append(button)
-      })
-    })
+        if (currentToken !== this.loadToken) {
+          return
+        }
 
-    this.pagination.update(this.page, this.maxPage)
-  }
+        fragment.append(this.createPokemonButton(pokemon))
+      }
 
-  selectPokemon(name) {
-    // Pedimos el detalle del Pokemon y avisamos al componente padre.
-    this.pokemonService.getPokemonByName(name).then((pokemon) => {
-      this.onSelect(pokemon)
-    })
-  }
+      if (currentToken !== this.loadToken) {
+        return
+      }
 
-  prevPage() {
-    // Solo podemos retroceder si no estamos en la pagina 1.
-    if (this.page > 1) {
-      this.page = this.page - 1
-      this.loadPage()
+      this.listContainer.innerHTML = ""
+      this.listContainer.append(fragment)
+    } catch (error) {
+      if (currentToken !== this.loadToken) {
+        return
+      }
+
+      this.showMessage("No se pudo cargar esta pagina. Revisa tu conexion.")
+    }
+
+    if (currentToken === this.loadToken) {
+      this.pagination.update(this.page, this.maxPage)
     }
   }
 
+  createPokemonButton(pokemon) {
+    const button = document.createElement("button")
+    button.type = "button"
+
+    const pokemonId = pokemon.id.toString().padStart(3, "0")
+    const pokemonType = pokemon.types[0] || "normal"
+    let types = ""
+
+    for (let i = 0; i < pokemon.types.length; i += 1) {
+      const type = pokemon.types[i]
+      types += `<span class="${type} pokemon-list__type pokemon-list__type--white">${type}</span>`
+    }
+
+    button.className = "pokemon-list__button pokemon-list__card"
+    button.style.setProperty("--pokemon-list-color", `var(--type-${pokemonType})`)
+    button.innerHTML = `
+      <div class="pokemon-list__side pokemon-list__side--color"></div>
+      <div class="pokemon-list__side pokemon-list__side--white">
+        <span class="pokemon-list__id">#${pokemonId}</span>
+        <strong class="pokemon-list__name">${pokemon.name}</strong>
+        <div class="pokemon-list__types">
+          ${types}
+        </div>
+      </div>
+      <img class="pokemon-list__image" src="${pokemon.image}" alt="${pokemon.name}">
+    `
+
+    button.addEventListener("click", () => this.selectPokemon(pokemon.name))
+    return button
+  }
+
+  async selectPokemon(name) {
+    try {
+      const pokemon = await this.pokemonService.getPokemonByName(name)
+      this.onSelect(pokemon)
+    } catch (error) {
+      this.showMessage("No se pudo cargar el Pokemon. Revisa tu conexion.")
+    }
+  }
+
+  prevPage() {
+    if (this.page <= 1) {
+      return
+    }
+
+    this.page = this.page - 1
+    this.loadPage()
+  }
+
   nextPage() {
-    // Avanzamos una pagina y volvemos a pedir datos a la API.
     if (this.page >= this.maxPage) {
       return
     }
