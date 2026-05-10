@@ -1,11 +1,11 @@
-import { PokemonCardComponent } from "./PokemonCardComponent.js"
-import { PokemonListComponent } from "./PokemonListComponent.js"
+import { PokemonCardComponent } from "../pokemon/PokemonCardComponent.js"
+import { PokemonListComponent } from "../pokemon/PokemonListComponent.js"
 import { ResultModalComponent } from "./ResultModalComponent.js"
-import { PaginationComponent } from "./PaginationComponent.js"
-import { BattleService } from "../services/BattleService.js"
-import { PokemonService } from "../services/PokemonService.js"
-import { StorageService } from "../services/StorageService.js"
-import { BalancedStrategy } from "../strategies/BalancedStrategy.js"
+import { PaginationComponent } from "../ui/PaginationComponent.js"
+import { BattleService } from "../../services/BattleService.js"
+import { PokemonService } from "../../services/PokemonService.js"
+import { StorageService } from "../../services/StorageService.js"
+import { BalancedStrategy } from "../../strategies/BalancedStrategy.js"
 
 export class BattleComponent {
   constructor() {

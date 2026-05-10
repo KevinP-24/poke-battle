@@ -1,6 +1,4 @@
-import { BattleComponent } from "./components/BattleComponent.js"
-import { ThemeToggleComponent } from "./components/ThemeToggleComponent.js"
-import { ResultModalComponent } from "./components/ResultModalComponent.js"
+import { BattleComponent, ThemeToggleComponent, ResultModalComponent } from "./components/index.js"
 import { StorageService } from "./services/StorageService.js"
 import { ThemeService } from "./services/ThemeService.js"
 

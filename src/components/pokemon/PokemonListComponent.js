@@ -1,6 +1,6 @@
-import { PaginationComponent } from "./PaginationComponent.js"
-import { LoaderComponent } from "./LoaderComponent.js"
-import { CANTIDAD_MAXIMA } from "../utils/constants.js"
+import { PaginationComponent } from "../ui/PaginationComponent.js"
+import { LoaderComponent } from "../ui/LoaderComponent.js"
+import { CANTIDAD_MAXIMA } from "../../utils/constants.js"
 
 export class PokemonListComponent {
   constructor({ title, pokemonService, onSelect }) {
