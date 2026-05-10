@@ -1,4 +1,4 @@
-import { PokemonCardComponent } from "./PokemonCardComponent.js"
+import { PokemonCardComponent } from "../pokemon/PokemonCardComponent.js"
 
 export class ResultModalComponent {
   constructor({ title, message = "", result = null, pokemonOne = null, pokemonTwo = null, winnerPokemon = null }) {
