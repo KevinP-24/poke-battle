@@ -4,7 +4,7 @@ export class ThemeToggleComponent {
     this.element = document.createElement("button")
   }
 
-  render() {
+  renderizar() {
     this.element.className = "theme-button"
     this.element.innerHTML = `
       <span class="theme-button__indicator">
@@ -14,18 +14,18 @@ export class ThemeToggleComponent {
       </span>
     `
 
-    this.updateIcon()
-    this.element.addEventListener("click", () => this.handleClick())
+    this.actualizarIcono()
+    this.element.addEventListener("click", () => this.manejarClick())
 
     return this.element
   }
 
-  handleClick() {
-    this.themeService.toggleTheme()
-    this.updateIcon()
+  manejarClick() {
+    this.themeService.alternarTema()
+    this.actualizarIcono()
   }
 
-  updateIcon() {
+  actualizarIcono() {
     const icon = this.element.querySelector(".theme-button__icon")
     const theme = document.documentElement.dataset.theme
 

@@ -6,7 +6,7 @@ export class LoaderComponent {
     this.element = document.createElement("p")
   }
 
-  render() {
+  renderizar() {
     this.element.className = "loader"
     this.element.innerHTML = ""
     this.element.style.gridColumn = "1 / -1"

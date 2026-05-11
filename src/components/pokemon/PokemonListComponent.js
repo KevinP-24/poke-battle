@@ -22,7 +22,7 @@ export class PokemonListComponent {
     this.pagination = null
   }
 
-  render() {
+  renderizar() {
     // Limpiamos y armamos la estructura.
     this.element.className = "pokemon-list"
     this.element.innerHTML = ""
@@ -33,45 +33,45 @@ export class PokemonListComponent {
     this.listContainer.className = "pokemon-list__items"
 
     this.pagination = new PaginationComponent({
-      getPage: () => this.page,
-      getMaxPage: () => this.maxPage,
-      onPrev: () => this.prevPage(),
-      onNext: () => this.nextPage(),
+      obtenerPagina: () => this.page,
+      obtenerMaximaPagina: () => this.maxPage,
+      irAnterior: () => this.paginaAnterior(),
+      irSiguiente: () => this.paginaSiguiente(),
     })
 
-    this.element.append(titleElement, this.listContainer, this.pagination.render())
+    this.element.append(titleElement, this.listContainer, this.pagination.renderizar())
     return this.element
   }
 
-  setPokemonList(pokemonList) {
+  establecerListaPokemon(pokemonList) {
     this.pokemonList = pokemonList
     this.maxPage = Math.ceil(this.pokemonList.length / this.limit)
   }
 
-  loadPage() {
+  cargarPagina() {
     if (!this.pokemonList.length) {
-      this.showLoading("Cargando Pokemon...")
+      this.mostrarCarga("Cargando Pokemon...")
       return
     }
 
-    this.renderPage()
+    this.renderizarPagina()
   }
 
-  showLoading(message, showSpinner = true) {
+  mostrarCarga(mensaje, mostrarSpinner = true) {
     this.listContainer.innerHTML = ""
-    this.listContainer.append(new LoaderComponent(message, showSpinner).render())
+    this.listContainer.append(new LoaderComponent(mensaje, mostrarSpinner).renderizar())
   }
 
-  showMessage(message) {
+  mostrarMensaje(mensaje) {
     this.page = 1
-    this.showLoading(message, false)
+    this.mostrarCarga(mensaje, false)
 
     if (this.pagination) {
-      this.pagination.update(this.page, 1)
+      this.pagination.actualizar(this.page, 1)
     }
   }
 
-  async renderPage() {
+  async renderizarPagina() {
     this.loadToken += 1
     const currentToken = this.loadToken
 
@@ -79,7 +79,7 @@ export class PokemonListComponent {
     const end = start + this.limit
     const pagePokemon = this.pokemonList.slice(start, end)
 
-    this.showLoading("Cargando Pokemon...")
+    this.mostrarCarga("Cargando Pokemon...")
 
     try {
       const fragment = document.createDocumentFragment()
@@ -90,13 +90,13 @@ export class PokemonListComponent {
         }
 
         const pokemonListItem = pagePokemon[i]
-        const pokemon = await this.pokemonService.getPokemonByName(pokemonListItem.name)
+        const pokemon = await this.pokemonService.obtenerPokemonPorNombre(pokemonListItem.name)
 
         if (currentToken !== this.loadToken) {
           return
         }
 
-        fragment.append(this.createPokemonButton(pokemon))
+        fragment.append(this.crearBotonPokemon(pokemon))
       }
 
       if (currentToken !== this.loadToken) {
@@ -110,15 +110,15 @@ export class PokemonListComponent {
         return
       }
 
-      this.showMessage("No se pudo cargar esta pagina. Revisa tu conexion.")
+      this.mostrarMensaje("No se pudo cargar esta pagina. Revisa tu conexion.")
     }
 
     if (currentToken === this.loadToken) {
-      this.pagination.update(this.page, this.maxPage)
+      this.pagination.actualizar(this.page, this.maxPage)
     }
   }
 
-  createPokemonButton(pokemon) {
+  crearBotonPokemon(pokemon) {
     const button = document.createElement("button")
     button.type = "button"
 
@@ -145,34 +145,34 @@ export class PokemonListComponent {
       <img class="pokemon-list__image" src="${pokemon.image}" alt="${pokemon.name}">
     `
 
-    button.addEventListener("click", () => this.selectPokemon(pokemon.name))
+    button.addEventListener("click", () => this.seleccionarPokemon(pokemon.name))
     return button
   }
 
-  async selectPokemon(name) {
+  async seleccionarPokemon(nombre) {
     try {
-      const pokemon = await this.pokemonService.getPokemonByName(name)
+      const pokemon = await this.pokemonService.obtenerPokemonPorNombre(nombre)
       this.onSelect(pokemon)
     } catch (error) {
-      this.showMessage("No se pudo cargar el Pokemon. Revisa tu conexion.")
+      this.mostrarMensaje("No se pudo cargar el Pokemon. Revisa tu conexion.")
     }
   }
 
-  prevPage() {
+  paginaAnterior() {
     if (this.page <= 1) {
       return
     }
 
     this.page = this.page - 1
-    this.loadPage()
+    this.cargarPagina()
   }
 
-  nextPage() {
+  paginaSiguiente() {
     if (this.page >= this.maxPage) {
       return
     }
 
     this.page = this.page + 1
-    this.loadPage()
+    this.cargarPagina()
   }
 }

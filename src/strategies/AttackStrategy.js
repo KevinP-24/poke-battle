@@ -1,31 +1,31 @@
 export class AttackStrategy {
-  calculate(pokemonOne, pokemonTwo) {
-    const score1 = pokemonOne.stats.attack
-    const score2 = pokemonTwo.stats.attack
+  calcular(pokemonUno, pokemonDos) {
+    const puntuacionUno = pokemonUno.stats.attack
+    const puntuacionDos = pokemonDos.stats.attack
 
-    if (score1 > score2) {
+    if (puntuacionUno > puntuacionDos) {
       return {
-        winner: pokemonOne.name,
+        winner: pokemonUno.name,
         reason: "Gano por mayor ataque",
-        score1,
-        score2,
+        score1: puntuacionUno,
+        score2: puntuacionDos,
       }
     }
 
-    if (score2 > score1) {
+    if (puntuacionDos > puntuacionUno) {
       return {
-        winner: pokemonTwo.name,
+        winner: pokemonDos.name,
         reason: "Gano por mayor ataque",
-        score1,
-        score2,
+        score1: puntuacionUno,
+        score2: puntuacionDos,
       }
     }
 
     return {
       winner: "Empate",
       reason: "Ambos Pokemon tienen el mismo ataque",
-      score1,
-      score2,
+      score1: puntuacionUno,
+      score2: puntuacionDos,
     }
   }
 }

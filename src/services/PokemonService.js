@@ -2,7 +2,7 @@ import { POKE_API_URL } from "../utils/constants.js"
 import { PokemonAdapter } from "../adapters/PokemonAdapter.js"
 
 export class PokemonService {
-  async request(url) {
+  async solicitar(url) {
     const response = await fetch(url)
 
     if (!response.ok) {
@@ -12,15 +12,15 @@ export class PokemonService {
     return response.json()
   }
 
-  async getPokemonList(limit, offset) {
+  async obtenerListaPokemon(cantidad, desplazamiento) {
     // Pedimos una lista de Pokemon a la API.
-    const data = await this.request(`${POKE_API_URL}?limit=${limit}&offset=${offset}`)
+    const data = await this.solicitar(`${POKE_API_URL}?limit=${cantidad}&offset=${desplazamiento}`)
     return data.results
   }
 
-  async getPokemonByName(name) {
+  async obtenerPokemonPorNombre(nombre) {
     // Pedimos el detalle de un Pokemon y lo convertimos con el Adapter.
-    const data = await this.request(`${POKE_API_URL}/${name}`)
-    return PokemonAdapter.adapt(data)
+    const data = await this.solicitar(`${POKE_API_URL}/${nombre}`)
+    return PokemonAdapter.adaptar(data)
   }
 }

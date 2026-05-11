@@ -12,7 +12,7 @@ export class ResultModalComponent {
     this.element = document.createElement("div")
   }
 
-  render() {
+  renderizar() {
     this.element.className = "modal"
 
     const content = document.createElement("div")
@@ -25,9 +25,9 @@ export class ResultModalComponent {
     body.className = "modal__body"
 
     if (this.result) {
-      this.renderBattleResult(body)
+      this.renderizarResultadoBatalla(body)
     } else {
-      this.renderMessage(body)
+      this.renderizarMensaje(body)
     }
 
     const closeButton = document.createElement("button")
@@ -41,16 +41,16 @@ export class ResultModalComponent {
     return this.element
   }
 
-  renderMessage(body) {
+  renderizarMensaje(body) {
     body.classList.add("modal__body--message")
     body.textContent = this.message
   }
 
-  renderBattleResult(body) {
+  renderizarResultadoBatalla(body) {
     if (this.winnerPokemon) {
       const winnerCard = document.createElement("div")
       winnerCard.className = "modal__winner-card"
-      winnerCard.append(new PokemonCardComponent(this.winnerPokemon).render())
+      winnerCard.append(new PokemonCardComponent(this.winnerPokemon).renderizar())
       body.append(winnerCard)
     }
 

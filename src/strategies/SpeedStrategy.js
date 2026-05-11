@@ -1,31 +1,31 @@
 export class SpeedStrategy {
-  calculate(pokemonOne, pokemonTwo) {
-    const score1 = pokemonOne.stats.speed
-    const score2 = pokemonTwo.stats.speed
+  calcular(pokemonUno, pokemonDos) {
+    const puntuacionUno = pokemonUno.stats.speed
+    const puntuacionDos = pokemonDos.stats.speed
 
-    if (score1 > score2) {
+    if (puntuacionUno > puntuacionDos) {
       return {
-        winner: pokemonOne.name,
+        winner: pokemonUno.name,
         reason: "Gano por mayor velocidad",
-        score1,
-        score2,
+        score1: puntuacionUno,
+        score2: puntuacionDos,
       }
     }
 
-    if (score2 > score1) {
+    if (puntuacionDos > puntuacionUno) {
       return {
-        winner: pokemonTwo.name,
+        winner: pokemonDos.name,
         reason: "Gano por mayor velocidad",
-        score1,
-        score2,
+        score1: puntuacionUno,
+        score2: puntuacionDos,
       }
     }
 
     return {
       winner: "Empate",
       reason: "Ambos Pokemon tienen la misma velocidad",
-      score1,
-      score2,
+      score1: puntuacionUno,
+      score2: puntuacionDos,
     }
   }
 }

@@ -13,9 +13,9 @@ export class App {
     this.offlineModalElement = null
   }
 
-  render() {
+  renderizar() {
     // Aplicamos el tema guardado antes de pintar la app.
-    this.themeService.loadTheme()
+    this.themeService.cargarTema()
 
     const page = document.createElement("div")
     page.className = "app"
@@ -30,38 +30,38 @@ export class App {
 
     const themeToggle = new ThemeToggleComponent(this.themeService)
 
-    header.append(titleImage, themeToggle.render())
+    header.append(titleImage, themeToggle.renderizar())
 
     this.battleComponent = new BattleComponent()
 
-    page.append(header, this.battleComponent.render())
+    page.append(header, this.battleComponent.renderizar())
 
     this.root.innerHTML = ""
     this.root.append(page)
 
-    this.bindNetworkListeners()
+    this.enlazarEscuchasRed()
   }
 
-  bindNetworkListeners() {
+  enlazarEscuchasRed() {
     if (this.networkListenersAttached) {
       return
     }
 
     window.addEventListener("offline", () => {
-      this.showOfflineModal()
+      this.mostrarModalSinConexion()
     })
 
     window.addEventListener("online", () => {
-      this.hideOfflineModal()
+      this.ocultarModalSinConexion()
       if (this.battleComponent) {
-        this.battleComponent.loadPokemonData()
+        this.battleComponent.cargarDatosPokemon()
       }
     })
 
     this.networkListenersAttached = true
   }
 
-  showOfflineModal() {
+  mostrarModalSinConexion() {
     if (this.offlineModalShown) {
       return
     }
@@ -73,12 +73,12 @@ export class App {
       message: "Se perdio la conexion a internet. La app seguira funcionando cuando vuelva la red.",
     })
 
-    const modalElement = modal.render()
+    const modalElement = modal.renderizar()
     const closeButton = modalElement.querySelector("button")
     closeButton.addEventListener(
       "click",
       () => {
-        this.hideOfflineModal()
+        this.ocultarModalSinConexion()
       },
       { once: true }
     )
@@ -87,7 +87,7 @@ export class App {
     document.body.append(modalElement)
   }
 
-  hideOfflineModal() {
+  ocultarModalSinConexion() {
     this.offlineModalShown = false
 
     if (this.offlineModalElement) {

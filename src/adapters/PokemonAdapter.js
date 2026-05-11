@@ -1,24 +1,24 @@
 export class PokemonAdapter {
-  static adapt(data) {
+  static adaptar(datos) {
     // Convertimos la respuesta grande de PokeAPI en un objeto sencillo.
     const types = []
 
-    for (let i = 0; i < data.types.length; i += 1) {
-      types.push(data.types[i].type.name)
+    for (let i = 0; i < datos.types.length; i += 1) {
+      types.push(datos.types[i].type.name)
     }
 
     return {
-      id: data.id,
-      name: data.name,
-      image: data.sprites.other["official-artwork"].front_default,
+      id: datos.id,
+      name: datos.name,
+      image: datos.sprites.other["official-artwork"].front_default,
       types,
-      height: data.height,
-      weight: data.weight,
+      height: datos.height,
+      weight: datos.weight,
       stats: {
-        hp: data.stats[0].base_stat,
-        attack: data.stats[1].base_stat,
-        defense: data.stats[2].base_stat,
-        speed: data.stats[5].base_stat,
+        hp: datos.stats[0].base_stat,
+        attack: datos.stats[1].base_stat,
+        defense: datos.stats[2].base_stat,
+        speed: datos.stats[5].base_stat,
       },
     }
   }
