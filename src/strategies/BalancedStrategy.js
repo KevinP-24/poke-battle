@@ -1,40 +1,40 @@
 export class BalancedStrategy {
-  calculate(pokemonOne, pokemonTwo) {
-    const score1 =
-      pokemonOne.stats.hp +
-      pokemonOne.stats.attack +
-      pokemonOne.stats.defense +
-      pokemonOne.stats.speed
+  calcular(pokemonUno, pokemonDos) {
+    const puntuacionUno =
+      pokemonUno.stats.hp +
+      pokemonUno.stats.attack +
+      pokemonUno.stats.defense +
+      pokemonUno.stats.speed
 
-    const score2 =
-      pokemonTwo.stats.hp +
-      pokemonTwo.stats.attack +
-      pokemonTwo.stats.defense +
-      pokemonTwo.stats.speed
+    const puntuacionDos =
+      pokemonDos.stats.hp +
+      pokemonDos.stats.attack +
+      pokemonDos.stats.defense +
+      pokemonDos.stats.speed
 
-    if (score1 > score2) {
+    if (puntuacionUno > puntuacionDos) {
       return {
-        winner: pokemonOne.name,
+        winner: pokemonUno.name,
         reason: "Gano por mejores estadisticas generales",
-        score1,
-        score2,
+        score1: puntuacionUno,
+        score2: puntuacionDos,
       }
     }
 
-    if (score2 > score1) {
+    if (puntuacionDos > puntuacionUno) {
       return {
-        winner: pokemonTwo.name,
+        winner: pokemonDos.name,
         reason: "Gano por mejores estadisticas generales",
-        score1,
-        score2,
+        score1: puntuacionUno,
+        score2: puntuacionDos,
       }
     }
 
     return {
       winner: "Empate",
       reason: "Ambos Pokemon tienen el mismo puntaje",
-      score1,
-      score2,
+      score1: puntuacionUno,
+      score2: puntuacionDos,
     }
   }
 }

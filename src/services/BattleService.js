@@ -4,8 +4,8 @@ export class BattleService {
     this.strategy = strategy
   }
 
-  battle(pokemonOne, pokemonTwo) {
+  combatir(pokemonUno, pokemonDos) {
     // Delegamos el calculo a la estrategia elegida.
-    return this.strategy.calculate(pokemonOne, pokemonTwo)
+    return this.strategy.calcular(pokemonUno, pokemonDos)
   }
 }

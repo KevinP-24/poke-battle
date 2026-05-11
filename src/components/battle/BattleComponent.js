@@ -30,7 +30,7 @@ export class BattleComponent {
     this.historyLimit = 5
   }
 
-  render() {
+  renderizar() {
     // Limpiamos el contenedor principal.
     this.element.innerHTML = ""
     this.element.className = "battle"
@@ -41,12 +41,12 @@ export class BattleComponent {
     // Contenedor del Pokemon 1.
     this.cardOneContainer = document.createElement("div")
     this.cardOneContainer.className = "battle-arena__player battle-arena__player--left"
-    this.cardOneContainer.append(new PokemonCardComponent().render())
+    this.cardOneContainer.append(new PokemonCardComponent().renderizar())
 
     // Contenedor del Pokemon 2.
     this.cardTwoContainer = document.createElement("div")
     this.cardTwoContainer.className = "battle-arena__player battle-arena__player--right"
-    this.cardTwoContainer.append(new PokemonCardComponent().render())
+    this.cardTwoContainer.append(new PokemonCardComponent().renderizar())
 
     // Imagen central de VS.
     const versusImage = document.createElement("img")
@@ -60,25 +60,25 @@ export class BattleComponent {
     const simulateButton = document.createElement("button")
     simulateButton.className = "primary-button"
     simulateButton.textContent = "Simular batalla"
-    simulateButton.addEventListener("click", () => this.simulateBattle())
+    simulateButton.addEventListener("click", () => this.simularBatalla())
 
     // Lista de seleccion izquierda.
     this.listOne = new PokemonListComponent({
       title: "Pokemon 1",
       pokemonService: this.pokemonService,
-      onSelect: (pokemon) => this.selectPokemonOne(pokemon),
+      onSelect: (pokemon) => this.seleccionarPokemonUno(pokemon),
     })
 
     // Lista de seleccion derecha.
     this.listTwo = new PokemonListComponent({
       title: "Pokemon 2",
       pokemonService: this.pokemonService,
-      onSelect: (pokemon) => this.selectPokemonTwo(pokemon),
+      onSelect: (pokemon) => this.seleccionarPokemonDos(pokemon),
     })
 
     const lists = document.createElement("section")
     lists.className = "selection-grid"
-    lists.append(this.listOne.render(), this.listTwo.render())
+    lists.append(this.listOne.renderizar(), this.listTwo.renderizar())
 
     // Zona del historial.
     this.historyContainer = document.createElement("section")
@@ -87,50 +87,50 @@ export class BattleComponent {
 
     this.element.append(arena, simulateButton, lists, this.historyContainer)
 
-    this.renderHistory()
-    this.loadPokemonData()
+    this.renderizarHistorial()
+    this.cargarDatosPokemon()
 
     return this.element
   }
 
-  async loadPokemonData() {
+  async cargarDatosPokemon() {
     if (!this.listOne || !this.listTwo) {
       return
     }
 
     try {
-      const list = await this.pokemonService.getPokemonList(151, 0)
-      this.listOne.setPokemonList(list)
-      this.listTwo.setPokemonList(list)
-      this.listOne.loadPage()
-      this.listTwo.loadPage()
-      await this.restoreSelectedPokemon()
+      const lista = await this.pokemonService.obtenerListaPokemon(151, 0)
+      this.listOne.establecerListaPokemon(lista)
+      this.listTwo.establecerListaPokemon(lista)
+      this.listOne.cargarPagina()
+      this.listTwo.cargarPagina()
+      await this.restaurarPokemonSeleccionados()
     } catch (error) {
       const message = navigator.onLine
         ? "No se pudieron cargar los Pokemon. Intenta de nuevo."
         : "Sin conexion. Conecta internet para cargar la lista."
 
-      this.listOne.showMessage(message)
-      this.listTwo.showMessage(message)
+      this.listOne.mostrarMensaje(message)
+      this.listTwo.mostrarMensaje(message)
     }
   }
 
-  async restoreSelectedPokemon() {
-    const savedPokemonOne = this.storageService.get("selectedPokemon1")
-    const savedPokemonTwo = this.storageService.get("selectedPokemon2")
+  async restaurarPokemonSeleccionados() {
+    const pokemonGuardadoUno = this.storageService.obtener("selectedPokemon1")
+    const pokemonGuardadoDos = this.storageService.obtener("selectedPokemon2")
 
-    if (savedPokemonOne) {
-      await this.restoreOnePokemon(savedPokemonOne)
+    if (pokemonGuardadoUno) {
+      await this.restaurarPrimerPokemon(pokemonGuardadoUno)
     }
 
-    if (savedPokemonTwo) {
-      await this.restoreTwoPokemon(savedPokemonTwo)
+    if (pokemonGuardadoDos) {
+      await this.restaurarSegundoPokemon(pokemonGuardadoDos)
     }
   }
 
-  async restoreOnePokemon(savedPokemon) {
-    if (savedPokemon && savedPokemon.name) {
-      this.selectPokemonOne(savedPokemon)
+  async restaurarPrimerPokemon(pokemonGuardado) {
+    if (pokemonGuardado && pokemonGuardado.name) {
+      this.seleccionarPokemonUno(pokemonGuardado)
       return
     }
 
@@ -138,13 +138,13 @@ export class BattleComponent {
       return
     }
 
-    const pokemon = await this.pokemonService.getPokemonByName(savedPokemon)
-    this.selectPokemonOne(pokemon)
+    const pokemon = await this.pokemonService.obtenerPokemonPorNombre(pokemonGuardado)
+    this.seleccionarPokemonUno(pokemon)
   }
 
-  async restoreTwoPokemon(savedPokemon) {
-    if (savedPokemon && savedPokemon.name) {
-      this.selectPokemonTwo(savedPokemon)
+  async restaurarSegundoPokemon(pokemonGuardado) {
+    if (pokemonGuardado && pokemonGuardado.name) {
+      this.seleccionarPokemonDos(pokemonGuardado)
       return
     }
 
@@ -152,98 +152,98 @@ export class BattleComponent {
       return
     }
 
-    const pokemon = await this.pokemonService.getPokemonByName(savedPokemon)
-    this.selectPokemonTwo(pokemon)
+    const pokemon = await this.pokemonService.obtenerPokemonPorNombre(pokemonGuardado)
+    this.seleccionarPokemonDos(pokemon)
   }
 
-  selectPokemonOne(pokemon) {
+  seleccionarPokemonUno(pokemon) {
     // Guardamos el primer Pokemon y pintamos su card.
     this.pokemonOne = pokemon
-    this.storageService.save("selectedPokemon1", pokemon)
+    this.storageService.guardar("selectedPokemon1", pokemon)
 
     this.cardOneContainer.innerHTML = ""
-    this.cardOneContainer.append(new PokemonCardComponent(pokemon).render())
+    this.cardOneContainer.append(new PokemonCardComponent(pokemon).renderizar())
   }
 
-  selectPokemonTwo(pokemon) {
+  seleccionarPokemonDos(pokemon) {
     // Guardamos el segundo Pokemon y pintamos su card.
     this.pokemonTwo = pokemon
-    this.storageService.save("selectedPokemon2", pokemon)
+    this.storageService.guardar("selectedPokemon2", pokemon)
 
     this.cardTwoContainer.innerHTML = ""
-    this.cardTwoContainer.append(new PokemonCardComponent(pokemon).render())
+    this.cardTwoContainer.append(new PokemonCardComponent(pokemon).renderizar())
   }
 
-  simulateBattle() {
+  simularBatalla() {
     // Si falta alguno, mostramos un modal simple.
     if (!this.pokemonOne || !this.pokemonTwo) {
       const modal = new ResultModalComponent({
         title: "Faltan Pokemon",
         message: "Selecciona dos Pokemon antes de simular la batalla.",
       })
-      document.body.append(modal.render())
+      document.body.append(modal.renderizar())
       return
     }
 
-    const result = this.battleService.battle(this.pokemonOne, this.pokemonTwo)
-    let winnerPokemon = null
+    const resultado = this.battleService.combatir(this.pokemonOne, this.pokemonTwo)
+    let pokemonGanador = null
 
-    if (result.winner === this.pokemonOne.name) {
-      winnerPokemon = this.pokemonOne
+    if (resultado.winner === this.pokemonOne.name) {
+      pokemonGanador = this.pokemonOne
     }
 
-    if (result.winner === this.pokemonTwo.name) {
-      winnerPokemon = this.pokemonTwo
+    if (resultado.winner === this.pokemonTwo.name) {
+      pokemonGanador = this.pokemonTwo
     }
 
-    const battleRecord = {
+    const registroBatalla = {
       pokemon1: this.pokemonOne.name,
       pokemon2: this.pokemonTwo.name,
-      winner: result.winner,
-      reason: result.reason,
+      winner: resultado.winner,
+      reason: resultado.reason,
       date: new Date().toLocaleDateString(),
     }
 
-    this.storageService.addBattle(battleRecord)
-    this.storageService.save("lastBattle", battleRecord)
+    this.storageService.agregarBatalla(registroBatalla)
+    this.storageService.guardar("lastBattle", registroBatalla)
 
     const modal = new ResultModalComponent({
       title: "Resultado de la batalla",
-      result,
+      result: resultado,
       pokemonOne: this.pokemonOne,
       pokemonTwo: this.pokemonTwo,
-      winnerPokemon,
+      winnerPokemon: pokemonGanador,
     })
 
-    document.body.append(modal.render())
-    this.renderHistory()
-    this.cleanArena()
+    document.body.append(modal.renderizar())
+    this.renderizarHistorial()
+    this.limpiarArena()
   }
 
-  cleanArena() {
+  limpiarArena() {
     // Limpiamos memoria y storage para empezar otra vez.
     this.pokemonOne = null
     this.pokemonTwo = null
-    this.storageService.remove("selectedPokemon1")
-    this.storageService.remove("selectedPokemon2")
+    this.storageService.eliminar("selectedPokemon1")
+    this.storageService.eliminar("selectedPokemon2")
 
     this.cardOneContainer.innerHTML = ""
     this.cardTwoContainer.innerHTML = ""
-    this.cardOneContainer.append(new PokemonCardComponent().render())
-    this.cardTwoContainer.append(new PokemonCardComponent().render())
+    this.cardOneContainer.append(new PokemonCardComponent().renderizar())
+    this.cardTwoContainer.append(new PokemonCardComponent().renderizar())
   }
 
-  renderHistory() {
-    const history = this.storageService.getBattles()
-    const maxPage = Math.ceil(history.length / this.historyLimit) || 1
+  renderizarHistorial() {
+    const historial = this.storageService.obtenerBatallas()
+    const paginaMaxima = Math.ceil(historial.length / this.historyLimit) || 1
 
-    if (this.historyPage > maxPage) {
-      this.historyPage = maxPage
+    if (this.historyPage > paginaMaxima) {
+      this.historyPage = paginaMaxima
     }
 
     this.historyContainer.innerHTML = "<h2>Historial de batallas</h2>"
 
-    if (history.length === 0) {
+    if (historial.length === 0) {
       const empty = document.createElement("p")
       empty.textContent = "No hay batallas guardadas."
       this.historyContainer.append(empty)
@@ -252,9 +252,9 @@ export class BattleComponent {
 
     const start = (this.historyPage - 1) * this.historyLimit
     const end = start + this.historyLimit
-    const pageHistory = history.slice(start, end)
+    const historialPagina = historial.slice(start, end)
 
-    pageHistory.forEach((battle) => {
+    historialPagina.forEach((battle) => {
       const item = document.createElement("article")
       item.className = "history__item"
       item.innerHTML = `
@@ -272,22 +272,22 @@ export class BattleComponent {
     })
 
     const pagination = new PaginationComponent({
-      getPage: () => this.historyPage,
-      getMaxPage: () => maxPage,
-      onPrev: () => {
+      obtenerPagina: () => this.historyPage,
+      obtenerMaximaPagina: () => paginaMaxima,
+      irAnterior: () => {
         if (this.historyPage > 1) {
           this.historyPage = this.historyPage - 1
-          this.renderHistory()
+          this.renderizarHistorial()
         }
       },
-      onNext: () => {
-        if (this.historyPage < maxPage) {
+      irSiguiente: () => {
+        if (this.historyPage < paginaMaxima) {
           this.historyPage = this.historyPage + 1
-          this.renderHistory()
+          this.renderizarHistorial()
         }
       },
     })
 
-    this.historyContainer.append(pagination.render())
+    this.historyContainer.append(pagination.renderizar())
   }
 }

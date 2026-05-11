@@ -7,4 +7,4 @@ const contenedorPrincipal = document.querySelector("#root")
 const app = new App(contenedorPrincipal)
 
 // Pintamos la interfaz.
-app.render()
+app.renderizar()
